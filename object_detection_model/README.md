@@ -55,7 +55,7 @@ docker build -t detect:1.0
 ```
 2. Create the container from the image
 
-This is just shorten the command
+This is just to shorten the command
 ```
 run="docker run -it --mount type=bind,src=$(pwd),dst=/object_detection_model/ detect:1.0"
 ```
