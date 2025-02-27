@@ -35,7 +35,7 @@ pip install -r requirements.txt
 ## Training A Yolo Model
 Go ./references/link.md and look for the ultralytics training api link. You can find the arguments to tune hyperameters.
 
-1. Make you run the following command from the path **/numaware/object_detection_model/**
+1. Make sure you run the following command from the path **/numaware/object_detection_model/**
 2. In the **name** argument pass the following string **initials-exp**. For example, if Marco Garcia is training than place **name=mg-exp**
 3. In the **project** argument pass the following string **.**. For example, **project=.**
 4. For the other arguments, read the ultralytics training api 
