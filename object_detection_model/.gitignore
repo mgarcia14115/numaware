@@ -19,7 +19,4 @@ data/raw/*
 data/staging/*
 !data/staging/deleteme.txt
 
-#Ignore the yolo results
 
-*-exp*
-*-pred*
