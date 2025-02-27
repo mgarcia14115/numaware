@@ -15,16 +15,19 @@ sudo zypper in python311
 ```
 
 ```
-source .venv/bin/activate
-```
-
-```
 python3.11 -m venv .venv
 ```
 
-
+```
+source .venv/bin/activate
+```
 
 3. Install requirements
+
+```
+pip install --upgrade pip 
+```
+
 ```
 pip install -r requirements.txt 
 ```

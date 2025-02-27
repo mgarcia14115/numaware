@@ -3,8 +3,10 @@
 __pycache__/
 
 # Ignore virtual environment directories
-venv/
-env/
+.venv/
+
+
+
 local/*
 !local/
 !local/deleteme.txt
