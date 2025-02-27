@@ -42,7 +42,7 @@ Go ./references/link.md and look for the ultralytics training api link. You can 
 
 
 ```
-yolo detect train data=$(pwd)/data/processed/data.yaml model=yolo11n.yaml epochs=2 imgsz=640 project=. name=mg-exp save=True
+yolo detect train data=$(pwd)/data/processed/data.yaml model=yolo11n.yaml epochs=2 imgsz=640 project=./local/ name=mg-exp save=True
 ```
 
 ## Setting Up A Containerized Enviroment
@@ -64,5 +64,5 @@ $run /bin/bash
 ```
 3. Finally, from inside your container start training
 ```
-yolo detect train data=$(pwd)/data/processed/data.yaml model=yolo11n.yaml epochs=2 imgsz=640 project=. name=mg-exp save=True
+yolo detect train data=$(pwd)/data/processed/data.yaml model=yolo11n.yaml epochs=2 imgsz=640 project=./local/ name=mg-exp save=True
 ```
