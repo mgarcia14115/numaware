@@ -1,1 +1,1 @@
-![Project logo, A warehouse](/local/logo-transparent-png.png)
+![Project logo, A warehouse](/other/images/logo-transparent-png.png)
