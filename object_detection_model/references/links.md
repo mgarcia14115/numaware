@@ -23,3 +23,7 @@ https://pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html
 
 ### Removing layers with Identity()
 https://pytorch.org/docs/stable/generated/torch.nn.Identity.html
+
+
+### Markdown Guide
+https://www.markdownguide.org/basic-syntax/
