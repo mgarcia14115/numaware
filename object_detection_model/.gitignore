@@ -8,17 +8,13 @@ __pycache__/
 
 
 local/*
-!local/
 !local/deleteme.txt
 
 data/processed/*
-!data/processed/
 !data/processed/deleteme.txt
 
 data/raw/*
-!data/raw/
 !data/raw/deleteme.txt
 
 data/staging/*
-!data/staging/
 !data/staging/deleteme.txt
