@@ -1,1 +1,1 @@
-![Project logo, A warehouse](/other/images/logo-transparent-png.png)
+![Project logo, A warehouse](/object_detection_model/other/images/logo-transparent-png.png)
