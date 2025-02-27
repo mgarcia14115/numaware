@@ -1,9 +1,0 @@
-FROM opensuse/leap:15.6
-
-WORKDIR /src
-
-RUN zypper -n in python311 python311-pip tar gzip 
-
-RUN pip install opencv-python
-RUN pip install opencv-python-headless
-
