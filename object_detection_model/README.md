@@ -45,3 +45,20 @@ Go ./references/link.md and look for the ultralytics training api link. You can 
 yolo detect train data=$(pwd)/data/processed/data.yaml model=yolo11n.yaml epochs=2 imgsz=640 project=. name=mg-exp save=True
 ```
 
+## Setting Up A Containerized Enviroment
+
+This is optional. If you want a Containerized enviroment than follow the following steps. Also make sure to install docker. 
+
+1. Build the image
+```
+docker build -t detect:1.0
+```
+2. Create the container from the image
+
+This is just shorten the command
+```
+run="docker run -it --mount type=bind,src=$(pwd),dst=/object_detection_model/ detect:1.0"
+```
+```
+$run /bin/bash
+```

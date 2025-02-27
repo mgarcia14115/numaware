@@ -1,0 +1,14 @@
+FROM opensuse/leap:15.6
+
+WORKDIR object_detection_model
+
+RUN zypper -n in python311 python311-pip 
+RUN zypper -n in libgthread-2_0-0
+RUN zypper -n in libGLU1
+
+COPY requirements.txt .
+
+RUN pip install --upgrade pip 
+RUN pip install -r requirements.txt 
+
+CMD ls
