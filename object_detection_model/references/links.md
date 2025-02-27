@@ -27,3 +27,9 @@ https://pytorch.org/docs/stable/generated/torch.nn.Identity.html
 
 ### Markdown Guide
 https://www.markdownguide.org/basic-syntax/
+
+### Ultralytics Training api
+https://docs.ultralytics.com/modes/train/#train-settings
+
+### Ultralytics Predict api
+https://docs.ultralytics.com/modes/predict/#inference-arguments

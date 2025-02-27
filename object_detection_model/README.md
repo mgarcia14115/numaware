@@ -32,3 +32,11 @@ pip install -r requirements.txt
 ```
 
 
+## Training A Yolo Model
+Go ./references/link.md and look for the ultralytics training api link. You can find the arguments to tune hyperameters.
+
+Make you run this from the path /numaware/object_detection_model/
+
+```
+yolo detect train data=$(pwd)/data/processed/data.yaml model=yolo11n.yaml epochs=2 imgsz=640 project=. name=mg-exp save=true
+```
