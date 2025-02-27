@@ -47,7 +47,7 @@ yolo detect train data=$(pwd)/data/processed/data.yaml model=yolo11n.yaml epochs
 
 ## Setting Up A Containerized Enviroment
 
-This is optional. If you want a Containerized enviroment than follow the following steps. Also make sure to install docker. 
+This is optional. If you want a Containerized enviroment than follow the following steps. Also make sure to install docker. Make sure your inside numaware/object_detection_model.
 
 1. Build the image
 ```
