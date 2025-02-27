@@ -1,3 +1,1 @@
-# Python Template
-
-This is a python template. 
+![Project logo, A warehouse](/local/logo-transparent-png.png)
