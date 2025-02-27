@@ -62,3 +62,7 @@ run="docker run -it --mount type=bind,src=$(pwd),dst=/object_detection_model/ de
 ```
 $run /bin/bash
 ```
+3. Finally, from inside your container start training
+```
+yolo detect train data=$(pwd)/data/processed/data.yaml model=yolo11n.yaml epochs=2 imgsz=640 project=. name=mg-exp save=True
+```
