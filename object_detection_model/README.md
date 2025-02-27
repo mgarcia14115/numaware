@@ -51,7 +51,7 @@ This is optional. If you want a Containerized enviroment than follow the followi
 
 1. Build the image
 ```
-docker build -t detect:1.0
+docker build -t detect:1.0 .
 ```
 2. Create the container from the image
 
