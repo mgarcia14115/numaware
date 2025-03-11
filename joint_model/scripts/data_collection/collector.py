@@ -76,6 +76,17 @@ class Data_Collector:
             
             if cap.isOpened():
                 print(f"Camera is open on idx {cam_idx}")
+    
+
+    def midpoint(self, coordinates):
+
+        x1 = coordinates[0].item()
+        y1 = coordinates[1].item()
+
+        x2 = coordinates[2].item()
+        y2 = coordinates[3].item()
+
+        return ((x1+x2)/2),((y1+y2)/2)
 
 
         
