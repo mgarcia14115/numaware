@@ -1,9 +1,9 @@
 import sys
-import os
+
 from PIL import Image
 from matplotlib import pyplot as plt
 import pandas as pd
-
+import os
 while os.getcwd() != "/" and ".gitignore" not in os.listdir(os.getcwd()):
 	os.chdir("..")
 	if os.getcwd() == "/":
@@ -13,18 +13,19 @@ while os.getcwd() != "/" and ".gitignore" not in os.listdir(os.getcwd()):
 print("Current Working Directory:  ", os.getcwd())
 
 from ultralytics                       import YOLO
-from data_collection.collector import Data_Collector
+from data_collection.collector         import Data_Collector
 
 num_args = len(sys.argv)
 
-if num_args < 2:
+if num_args < 4:
     print("please provide an image directory path and the path to the calibration files.")
-    print("Example input: python collect.py img_dir_path data_file_path cam_cali_path")
+    print("Example input: python collect.py img_dir_path data_file_path cam_cali_path cam_idx")
 else:
 
     imgs_dir_path  = sys.argv[1]
     data_file_path = sys.argv[2]
     cal_file_path  = sys.argv[3]
+    cam_idx        = int(sys.argv[4])
     
     
     obj = Data_Collector(imgs_dir_path = imgs_dir_path , cam_calibration_path = cal_file_path)
@@ -40,7 +41,7 @@ else:
     response = "n"
 
     while(response == "n"):
-        img_path = obj.take_image(img_name,2)
+        img_path = obj.take_image(img_name,cam_idx)
         model(source = img_path,conf = .6,show=True)
         print(f"Did all classes get predicted correctly? Enter [y|n]")
         response = input().lower()
@@ -75,17 +76,5 @@ else:
             all_joints.append([joints+":"+str(cls)])
             midpoints.append([str(x_mid) +"-" +str(y_mid)+":"+str(cls)])
 
-
-    df = pd.read_csv("/home/mgarcia/Desktop/joint_model_dataset/data.csv")
-
-    try:
-        idx = df.index[-1] + 1
-    except:
-        idx = 0
-
-    file = "images/" + img_name
-
-    df.loc[idx] = [file,all_joints,midpoints]
-
-    df.to_csv("/home/mgarcia/Desktop/joint_model_dataset/data.csv",index=False)
-            
+    
+    obj.save_data(data_file_path,img_name,all_joints,midpoints)

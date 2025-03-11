@@ -8,6 +8,7 @@ while os.getcwd() != "/" and ".gitignore" not in os.listdir(os.getcwd()):
 print("Current Working Directory:  ", os.getcwd())
 import cv2     as cv
 import numpy   as np
+import pandas as pd
 from PIL import Image
 from ultralytics import YOLO
 import data_collection.calibri as cal
@@ -17,11 +18,12 @@ import data_collection.calibri as cal
 
 class Data_Collector:
 
-    def __init__(self,imgs_dir_path, cam_calibration_path):
+    def __init__(self , imgs_dir_path = None, cam_calibration_path = None):
         self.imgs_dir_path = imgs_dir_path
-        data               = np.load(cam_calibration_path,allow_pickle=True)
-        self.mtx           = data['mtx']
-        self.dist          = data['dist']
+        if cam_calibration_path != None:
+            data               = np.load(cam_calibration_path,allow_pickle=True)
+            self.mtx           = data['mtx']
+            self.dist          = data['dist']
     
     def take_image(self, img_name , cam_idx):
 
@@ -70,7 +72,7 @@ class Data_Collector:
 
     def find_camera_idx(self):
         
-        for cam_idx in range(-1,10):
+        for cam_idx in range(-1,6):
 
             cap = cv.VideoCapture(cam_idx)
             
@@ -87,6 +89,21 @@ class Data_Collector:
         y2 = coordinates[3].item()
 
         return ((x1+x2)/2),((y1+y2)/2)
+    
+    def save_data(self, file_csv, img_name, all_joints, midpoints):
+        df = pd.read_csv(file_csv)
+
+        try:
+            idx = df.index[-1] + 1
+        except:
+            idx = 0
+
+        file = "images/" + img_name
+
+        df.loc[idx] = [file,all_joints,midpoints]
+
+        df.to_csv(file_csv,index=False)
+        
 
 
         
