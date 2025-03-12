@@ -6,9 +6,9 @@ import cv2
 import numpy as np
 import glob
 from PIL import Image
+import os
 
-
-def calibrate(folder, rows=6, cols=9, save_file='calibrationdata.npz'):
+def calibrate(folder, rows=8, cols=8, save_file='calibrationdata.npz'):
     """
     Calibrates the camera to get the undistortion parameters. Capture a few images of the chessboard pattern
     with your camera and store them in `folder`. This function obtains the undistortion parameters and saves
@@ -94,31 +94,33 @@ def undistort(img, mtx, dist):
 
     return undistortedImg
 
-if __name__ == '__main__':
-    folder = 'C:/Users/camer/OneDrive/Pictures/Camera Roll 1/'
-    rows = 8
-    cols = 8
-    save_file= 'calibrationdata.npz'
+# if __name__ == '__main__':
+#     folder = '../8x8'
+#     rows = 8
+#     cols = 8
+#     save_file= './logi_calibration/calibrationdata.npz'
 
-    data = np.load('calibrationdata.npz', allow_pickle=True)
-    lst = data.files
+#     #data = np.load('calibrationdata.npz', allow_pickle=True)
+#     #lst = data.files
 
-    mtx = data['mtx']
-    dist = data['dist']
+#     #mtx = data['mtx']
+#     #dist = data['dist']
     
-    # Calibrate
-    # mtx, dist = calibrate(
-    #     folder=folder,
-    #     rows=rows,
-    #     cols=cols,
-    #     save_file=save_file
-    # )
+#     #Calibrate
+#     mtx, dist = calibrate(
+#         folder=folder,
+#         rows=rows,
+#         cols=cols,
+#         save_file=save_file
+#     )
     
-    # Test undistortion on a sample image
-    img_paths = glob.glob(f'{folder.rstrip("/")}/*.jpg') + glob.glob(f'{folder.rstrip("/")}/*.png')
-    for img_path in img_paths:
-        # img_path = glob.glob(f'{folder.rstrip("/")}/*.jpg')[0]
-        img = cv2.imread(img_path)
-        undistorted = undistort(img, mtx, dist)
-        Image.fromarray(np.array(undistorted)).save("./" + img_path.split("/")[len(img_path.split("/")) -1].split("\\")[1][1:])
+#     # Test undistortion on a sample image
+#     # img_paths = glob.glob(f'{folder.rstrip("/")}/*.jpg') + glob.glob(f'{folder.rstrip("/")}/*.png')
+#     # for img_path in img_paths:
+#     #     # img_path = glob.glob(f'{folder.rstrip("/")}/*.jpg')[0]
+#     #     img = cv2.imread(img_path)
+#     #     undistorted = undistort(img, mtx, dist)
+#     #     #Image.fromarray(np.array(undistorted)).save("./" + img_path.split("/")[len(img_path.split("/")) -1].split("\\")[1][1:])
+        
+#     #     Image.fromarray(np.array(undistorted)).save("./" + os.path.basename(img_path))
 

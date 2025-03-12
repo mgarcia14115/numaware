@@ -14,7 +14,7 @@ print("Current Working Directory:  ", os.getcwd())
 
 from ultralytics                       import YOLO
 from data_collection.collector         import Data_Collector
-
+from src.abb                           import Robot
 num_args = len(sys.argv)
 
 if num_args < 4:
@@ -67,12 +67,29 @@ else:
             print(f"midpoint for bouding box: {x_mid},{y_mid}")            
 
             print("Go and record Joint positions for this pallet: >>>>")
+
+    
             img = Image.open(img_path)
             plt.imshow(img)
             plt.plot(x_mid,y_mid,marker=".",markersize=25)
-            plt.show()
-            print("Input the joints in the following format: j1-j2-j3-j4-j5-j6")
-            joints = input()
+            plt.show()     
+    
+            print(f"When the robot is ready to connect. Press any key ")
+            input()
+
+            connected = False
+            R = None
+            while connected == False:
+                
+                try:
+                    R = Robot(ip = '192.168.125.1')
+                    connected = True
+                except:
+                        print(f"Error connecting")
+            
+            
+            joints = obj.parse_joints(R.get_joints())
+            R.close()
             all_joints.append([joints+":"+str(cls)])
             midpoints.append([str(x_mid) +"-" +str(y_mid)+":"+str(cls)])
 

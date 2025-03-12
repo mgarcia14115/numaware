@@ -103,6 +103,15 @@ class Data_Collector:
         df.loc[idx] = [file,all_joints,midpoints]
 
         df.to_csv(file_csv,index=False)
+
+    def parse_joints(self,joints):
+
+        parsed_joints = ""
+
+        for j in joints:
+            parsed_joints += str(j)+"-"
+
+        return parsed_joints[0:-1]
         
 
 
