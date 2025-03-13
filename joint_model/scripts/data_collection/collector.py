@@ -12,18 +12,18 @@ import pandas as pd
 from PIL import Image
 from ultralytics import YOLO
 import data_collection.calibri as cal
+import matplotlib.pyplot as plt
 
 
 
 
 class Data_Collector:
 
-    def __init__(self , imgs_dir_path = None, cam_calibration_path = None):
+    def __init__(self , imgs_dir_path = None):
         self.imgs_dir_path = imgs_dir_path
-        if cam_calibration_path != None:
-            data               = np.load(cam_calibration_path,allow_pickle=True)
-            self.mtx           = data['mtx']
-            self.dist          = data['dist']
+        self.mid_x = 0.0
+        self.mid_y = 0.0
+      
     
     def take_image(self, img_name , cam_idx):
 
@@ -43,9 +43,8 @@ class Data_Collector:
             cv.destroyAllWindows()
             return None
         else:       
-            img = np.asarray(frame)
-            undistored_img = cal.undistort(img,self.mtx,self.dist)
-            success = cv.imwrite(abs_path,undistored_img)
+            
+            success = cv.imwrite(abs_path,frame)
             
             if success:
                 print(f"Image successfully saved to {abs_path}")
@@ -91,6 +90,7 @@ class Data_Collector:
         return ((x1+x2)/2),((y1+y2)/2)
     
     def save_data(self, file_csv, img_name, all_joints, midpoints):
+        
         df = pd.read_csv(file_csv)
 
         try:
@@ -112,6 +112,11 @@ class Data_Collector:
             parsed_joints += str(j)+"-"
 
         return parsed_joints[0:-1]
+    
+
+
+     
+    
         
 
 
