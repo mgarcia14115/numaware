@@ -26,6 +26,7 @@ pip install -r requirements.txt
   ```
 
 - collect.py
+
   **Purpose**: Collect Data for the joint model.
 
   1. Create an a directory that will hold an image directory and a data.csv file. 
