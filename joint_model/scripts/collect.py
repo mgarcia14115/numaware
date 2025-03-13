@@ -9,11 +9,14 @@ print("Current Working Directory:  ", os.getcwd())
 
 import sys
 from PIL import Image
+import matplotlib
+matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
 import pandas as pd
-from ultralytics                       import YOLO
-from data_collection.collector         import Data_Collector
-#from src.abb                           import Robot
+from ultralytics                                 import YOLO
+from data_collection.collector                   import Data_Collector
+from data_collection.abb     import Robot
+
 num_args = len(sys.argv)
 
 if num_args < 3:
@@ -52,19 +55,19 @@ else:
     
     for r in results:
         boxes = r.boxes
-      
+        idx = 0
         for box in boxes:
             cls = box.cls.item()
             
             # Get bounding box coordinates in (x1, y1, x2, y2) format
             
-            xyxy = box.xyxy[0]
+            xyxy = box.xyxy[idx]
             x_mid ,y_mid = obj.midpoint(xyxy)
             x_mid = round(x_mid,3)
             y_mid = round(y_mid,3)
            
-
-            print("Go and record Joint positions for this pallet: >>>>")
+            print(f"\n\n\n1. Click on the midpoint of the pallet. Exit the window when pressed.")
+            
             def on_press(event):
                 global x_mid,y_mid
                 x_mid,y_mid = event.xdata,event.ydata
@@ -80,11 +83,20 @@ else:
             plt.show()     
 
             #change this to work with the robot api
-            print(f"enter joints")
-            joints = input()
+            print(f"2. Go and record the Joint positions for this pallet in manual mode: >>>>")
+            print(f"3.Press enter when the robot is in programatic mode.")
+            input()
+            
+            try:
+                R = Robot(ip='192.168.125.1')
+            except:
+                print(f"The robot is not in programatic mode.")
+                exit()
             #########################################
 
-            
+            joints = obj.parse_joints(R.get_joints())
+            print(f"The following Joints where recorded: {joints}\n\n\n")
+            R.close()
             all_joints.append([joints+":"+str(cls)])
             midpoints.append([str(x_mid) +"-" +str(y_mid)+":"+str(cls)])
 
