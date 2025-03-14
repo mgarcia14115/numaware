@@ -3,19 +3,22 @@ while os.getcwd() != "/" and ".gitignore" not in os.listdir(os.getcwd()):
 	os.chdir("..")
 	if os.getcwd() == "/":
 		print("COULD NOT FIND pyproject.toml.  Invalid project base file.")
-
-
 print("Current Working Directory:  ", os.getcwd())
 
-import sys
-from PIL import Image
+
+
+
+
+
+
+import  sys
+from    PIL                             import Image
 import matplotlib
 matplotlib.use('TkAgg')
-from matplotlib import pyplot as plt
-import pandas as pd
-from ultralytics                                 import YOLO
-from data_collection.collector                   import Data_Collector
-from data_collection.abb     import Robot
+from matplotlib                         import pyplot as plt
+from ultralytics                        import YOLO
+from data_collection.collector          import Data_Collector
+from data_collection.abb                import Robot
 
 num_args = len(sys.argv)
 
@@ -24,28 +27,31 @@ if num_args < 4:
     print("Example input: python collect.py img_dir_path data_file_path cam_idx\n\n")
 else:
 
-    imgs_dir_path  = sys.argv[1]
-    data_file_path = sys.argv[2]
-    cam_idx        = int(sys.argv[3])
+    imgs_dir_path  = sys.argv[1]      # arg holding the path to directory where images will be saved
+    data_file_path = sys.argv[2]      # arg holding the path to data.csv file
+    cam_idx        = int(sys.argv[3]) # arg holding the camera index
     
     
-    obj = Data_Collector(imgs_dir_path = imgs_dir_path)
-    
-    img_count = obj.get_img_count(imgs_dir_path)
-    
-    img_name  = "img" + str(img_count) + ".png"
+    obj = Data_Collector(imgs_dir_path = imgs_dir_path) # Creating a data collector object 
+    img_count = obj.get_img_count(imgs_dir_path)        # Getting the count of how many images are in the folder
+    img_name  = "img" + str(img_count) + ".png"         # Giving the image a name with its number count
     
 
-    model = YOLO("../object_detection_model/model/mg_model_6/best.pt")
+    model = YOLO("../object_detection_model/model/mg_model_6/best.pt") # Loading in yolo model 
 
 
-    response = "n"
 
-    while(response != "y"):
-        img_path = obj.take_image(img_name,cam_idx)
-        model(source = img_path,conf = .6,show=True)
-        print(f"Did all classes get predicted correctly? Enter [y|n]")
-        response = input().lower()
+
+    # The loop will iterate until an image with all the correct classes are labeled. 
+    # This is done to verify the data we are saving is correctly labeled. 
+    # If the image is correctly saved hit the letter y.
+    
+    response = "n"                                                      # Current response is no to initiate the while loop 
+    while(response != "y"):                                             # Keep asking until response is yes
+        img_path = obj.take_image(img_name,cam_idx)                     # Take an image
+        model(source = img_path,conf = .6,show=True)                    # Make a prediction and display it
+        print(f"Did all classes get predicted correctly? Enter [y|n]")  # ask user if it was correctly labeled
+        response = input().lower() # User response
     
     results = model.predict(img_path,conf=.6)
 
