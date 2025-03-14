@@ -21,9 +21,7 @@ class Data_Collector:
 
     def __init__(self , imgs_dir_path = None):
         self.imgs_dir_path = imgs_dir_path
-        self.mid_x = 0.0
-        self.mid_y = 0.0
-      
+     
     
     def take_image(self, img_name , cam_idx):
 

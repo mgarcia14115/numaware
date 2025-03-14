@@ -19,7 +19,7 @@ from data_collection.abb     import Robot
 
 num_args = len(sys.argv)
 
-if num_args < 3:
+if num_args < 4:
     print("\n\nPlease provide the command line args. \n")
     print("Example input: python collect.py img_dir_path data_file_path cam_idx\n\n")
 else:
@@ -92,11 +92,12 @@ else:
             except:
                 print(f"The robot is not in programatic mode.")
                 exit()
-            #########################################
+            
 
             joints = obj.parse_joints(R.get_joints())
             print(f"The following Joints where recorded: {joints}\n\n\n")
             R.close()
+            #########################################
             all_joints.append([joints+":"+str(cls)])
             midpoints.append([str(x_mid) +"-" +str(y_mid)+":"+str(cls)])
 

@@ -16,7 +16,7 @@ The following list contains common issues and solutions. If you run into an issu
 
 - 3/13/25 jm 
 
-    **Issue**: When trying to run scripty.md for joint data collection you will run into the following error:
+    **Issue**: When trying to run collect.py for joint data collection you will run into the following error:
 
     *ModuleNotFoundError: No module named 'tkinter'*
 
