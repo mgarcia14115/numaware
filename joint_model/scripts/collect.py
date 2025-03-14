@@ -37,7 +37,7 @@ else:
     img_name  = "img" + str(img_count) + ".png"         # Giving the image a name with its number count
     
 
-    model = YOLO("../object_detection_model/model/mg_model_6/best.pt") # Loading in yolo model 
+    model = YOLO("../object_detection_model/model/mg_model_17/best.pt") # Loading in yolo model 
 
 
 
