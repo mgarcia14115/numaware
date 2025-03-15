@@ -5,7 +5,17 @@ while os.getcwd() != "/" and ".gitignore" not in os.listdir(os.getcwd()):
 		print("COULD NOT FIND gitignore.  Invalid project base file.")
 print("Current Working Directory:  ", os.getcwd())
 
+
+
+
+
+
+
 import  sys
+from    PIL                             import Image
+import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib                         import pyplot as plt
 from ultralytics                        import YOLO
 from data_collection.collector          import Data_Collector
 from data_collection.abb                import Robot
@@ -61,12 +71,26 @@ else:
             x_mid ,y_mid = obj.midpoint(xyxy)
             x_mid = round(x_mid,3)
             y_mid = round(y_mid,3)
-
-            print(f"Midpoints recorded are: {str(x_mid)} , {str(y_mid)}")
+           
+            print(f"\n\n\n1. Click on the midpoint of the pallet. Exit the window when pressed.")
+            
+            def on_press(event):
+                global x_mid,y_mid
+                x_mid,y_mid = event.xdata,event.ydata
+                print('you pressed',x_mid,y_mid)
+    
+            img = Image.open(img_path)
+            fig = plt.figure()
+            plt.imshow(img)
+            plt.plot(x_mid,y_mid,marker=".",markersize=25)
+            
+            cid = fig.canvas.mpl_connect('button_press_event', on_press)
           
+            plt.show()     
+
             #change this to work with the robot api
-            print(f"1. Go and record the Joint positions for this pallet in manual mode: >>>>")
-            print(f"2.Press enter when the robot is in programatic mode.")
+            print(f"2. Go and record the Joint positions for this pallet in manual mode: >>>>")
+            print(f"3.Press enter when the robot is in programatic mode.")
             input()
             
             try:
