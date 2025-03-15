@@ -1,61 +1,39 @@
 import os
 
-import sys
-import albumentations as A
-import cv2 as cv
-import matplotlib.pyplot as plt
-from PIL import Image
-import random
-from collector import Data_Collector
-import numpy as np
+# Set the path to your directory containing label files
+label_dir = "/home/mgarcia/Desktop/labels"
 
-dir_path = sys.argv[1]
+# Loop through all files in the directory
+for filename in os.listdir(label_dir):
+    if filename.endswith(".txt"):
+        file_path = os.path.join(label_dir, filename)
+        
+        # Open the file and read the lines
+        with open(file_path, "r") as file:
+            lines = file.readlines()
 
-obj = Data_Collector()
+        # Create a new list to store updated lines
+        updated_lines = []
 
-#https://albumentations.ai/docs/getting_started/transforms_and_targets/
-transformations = [
-    A.CLAHE(),
-    A.Blur(blur_limit=8),
-    A.OpticalDistortion(),
-    A.GridDistortion(),
-    A.HueSaturationValue(),
-    A.ElasticTransform(alpha=1, sigma=50, p=0.5),
-    A.ToGray(),
-    A.ZoomBlur(),
-    A.RGBShift(),
-    A.ToSepia(),
-    A.SaltAndPepper(),
-    A.ShotNoise(),
-    A.InvertImg(),
-    A.AutoContrast,
-]
+        # Iterate through each line and swap labels
+        for line in lines:
+            parts = line.split()
+            if parts:
+                # Swap the label (0 -> 2, 1 -> 0, 2 -> 1)
+                label = int(parts[0])
+                if label == 0:
+                    parts[0] = '2'
+                elif label == 1:
+                    parts[0] = '0'
+                elif label == 2:
+                    parts[0] = '1'
+                
+                updated_lines.append(" ".join(parts) + "\n")
 
+        # Write the updated lines back to the file
+        with open(file_path, "w") as file:
+            file.writelines(updated_lines)
 
-# path_img = "/home/mgarcia/Desktop/images/picture_2025-03-14_16-33-01.jpg"
+print("Label files updated successfully!")
 
-# # Read an image with OpenCV and convert it to the RGB colorspace
-# image = cv.imread(path_img)
-# image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
-
-
-def transform_img(transformations,path_dir,image,num):
-	
-    for trans in transformations:
-        transform = A.Compose(trans)
-        random.seed(42)
-        transformed = transform(image=image)
-        transformed_image = transformed["image"]
-        cv.imwrite(path_dir + "/aug/img" + str(num) + ".png",transformed_image)
-        num+=1
-
-num = obj.get_img_count(dir_path) + 1
-print(dir_path)
-for file in os.listdir(dir_path):
-    
-    if file.endswith(".jpg") or file.endswith(".png") or file.endswith(".jpeg"):     
-        image = cv.imread(os.path.join(dir_path,file))
-        print(image)
-        image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
-
-        transform_img(transformations,dir_path,image,num)
+        
