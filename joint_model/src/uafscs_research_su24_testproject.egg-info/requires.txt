@@ -1,0 +1,6 @@
+torch
+ipykernel
+scikit-learn
+pandas
+transformers
+sentencepiece

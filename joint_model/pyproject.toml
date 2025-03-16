@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uafscs-research-su24-testproject"
+version = "1.0.1"
+description = "UAFS AI Lab Test Project"
+readme = "README.md"
+authors = [{ name = "UAFS AI Lab", email = "myemail@uafs.edu" }]
+dependencies = [
+	"torch",
+	"ipykernel",
+	"scikit-learn",
+	"pandas",
+	"transformers",
+	"sentencepiece",
+]
+requires-python = ">=3.11"
