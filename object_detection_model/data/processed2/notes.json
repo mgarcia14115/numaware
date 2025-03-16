@@ -1,0 +1,21 @@
+{
+  "categories": [
+    {
+      "id": 0,
+      "name": "grey pallet"
+    },
+    {
+      "id": 1,
+      "name": "white pallet"
+    },
+    {
+      "id": 2,
+      "name": "black pallet"
+    }
+  ],
+  "info": {
+    "year": 2025,
+    "version": "1.0",
+    "contributor": "Label Studio"
+  }
+}

@@ -1,0 +1,6 @@
+train: ./train
+val: ./val
+test: ./test
+
+nc: 3
+names: ["grey pallet","white pallet","black pallet"]
