@@ -15,7 +15,7 @@ data/processed/*
 
 data/raw/*
 !data/raw/deleteme.txt
-!data/raw/data/
+
 data/staging/*
 !data/staging/deleteme.txt
 
