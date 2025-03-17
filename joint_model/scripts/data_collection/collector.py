@@ -40,19 +40,19 @@ class Data_Collector:
             cap.release()
             cv.destroyAllWindows()
             return None
-        else:       
+        #else:       
             
-            success = cv.imwrite(abs_path,frame)
+           # success = cv.imwrite(abs_path,frame)
             
-            if success:
-                print(f"Image successfully saved to {abs_path}")
+           # if success:
+           #     print(f"Image successfully saved to {abs_path}")
                
-            else:
-                print(f"An error occured. The image was not able to be captured.")
+           # else:
+           #     print(f"An error occured. The image was not able to be captured.")
                              
         cap.release()
         cv.destroyAllWindows()
-        return abs_path
+        return np.asarray(frame)
 
     
     def get_img_count(self, filepath):
@@ -87,7 +87,7 @@ class Data_Collector:
 
         return ((x1+x2)/2),((y1+y2)/2)
     
-    def save_data(self, file_csv, img_name, all_joints, midpoints):
+    def save_data(self, file_csv, img_name, all_joints, yolo_midpoints,our_midpoints):
         
         df = pd.read_csv(file_csv)
 
@@ -98,7 +98,7 @@ class Data_Collector:
 
         file = "images/" + img_name
 
-        df.loc[idx] = [file,all_joints,midpoints]
+        df.loc[idx] = [file,all_joints,yolo_midpoints,our_midpoints]
 
         df.to_csv(file_csv,index=False)
 
