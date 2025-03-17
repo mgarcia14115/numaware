@@ -29,10 +29,10 @@ obj = Data_Collector()
 #R.set_joints([32.8,32.49,9.95,-66.21,-68.98,132.6])
 # [, back&front,]
 #R.set_joints([32.8,32.49,9.95,-66.21,-68.98,132.6]) 
-parsed_carts = obj.parsed_carts(R.set_cartesian([[-292.34, 304.76, 361.17], [0.01, 0.009, -0.694, -0.72]]))
+parsed_carts = obj.parse_carts(R.get_cartesian())
 #R.set_joints([141.28,25.54,21.9,56.72,-65.82,55.6])
 try:
-    print(parse_carts)
+    print(parsed_carts)
     #R.set_joints([32.8,32.49,9.95,-66.21,-68.98,132.6])
     #print(f"Checking {str(R.get_cartesian())}")
     # print(f"Checking {str(R.get_joints())}")

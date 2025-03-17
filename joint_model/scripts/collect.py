@@ -62,7 +62,7 @@ else:
     all_joints      = [] # This list will store the joints for all predictions
     yolo_midpoints  = [] # All of midpoints 
     our_midpoints   = [] 
-    all_carts
+    all_carts       = []
     
 
     for r in results:
@@ -77,7 +77,7 @@ else:
             x_mid ,y_mid = obj.midpoint(xyxy)
             x_mid = round(x_mid,3)
             y_mid = round(y_mid,3)
-            yolo_midpoints.append([str(x_mid) +"-" +str(y_mid)+":"+str(cls)])
+            yolo_midpoints.append([str(x_mid) +"_" +str(y_mid)+":"+str(cls)])
 
 
             x2_mid = 0.0
@@ -110,21 +110,11 @@ else:
                 print(f"The robot is not in programatic mode.")
                 exit()
             
-                
-            joints = obj.parse_joints(R.get_joints())
+            cartesians_and_pose = obj.parse_carts(R.get_cartesian())      
+            joints              = obj.parse_joints(R.get_joints())
             print(f"The following Joints where recorded: {joints}\n\n\n")
             
-            carts_pose = R.get_cartesian()
-            carts = carts_pose[0]
-            pose  = carts_pose[1]
-            carts[1] = carts[1] - 60 # Move arm back
 
-            
-            # try:
-            #     #R.set_cartesian([carts,pose])
-            # except:
-            #     print(f"Error moving cartesians back")
-            #     exit()
 
             carts_pose = R.get_cartesian()
             carts = carts_pose[0]
@@ -147,12 +137,13 @@ else:
             try:              
                R.set_cartesian([[364.01, 277, 364.08], [0.01, 0.009, -0.694, -0.72]]) # Move to starting location
             except:
-                 print(f"Error moving joints")
+                 print(f"Error to start position")
                  exit()
             R.close()
             #########################################
             all_joints.append([joints+":"+str(cls)])
-            our_midpoints.append([str(x2_mid) +"-" +str(y2_mid)+":"+str(cls)])
+            all_carts.append([cartesians_and_pose+"_"+ str(cls)])
+            our_midpoints.append([str(x2_mid) +"_" +str(y2_mid)+"_"+str(cls)])
 
     cv.imwrite(os.path.join(imgs_dir_path,img_name),img)
-    obj.save_data(data_file_path,img_name,all_joints,yolo_midpoints,our_midpoints)
+    obj.save_data(data_file_path,img_name,all_joints,all_carts,yolo_midpoints,our_midpoints)

@@ -13,6 +13,7 @@ from PIL import Image
 from ultralytics import YOLO
 import data_collection.calibri as cal
 import matplotlib.pyplot as plt
+from csv import writer
 
 
 
@@ -78,20 +79,42 @@ class Data_Collector:
 
         return ((x1+x2)/2),((y1+y2)/2)
     
-    def save_data(self, file_csv, img_name, all_joints, yolo_midpoints,our_midpoints):
+    def save_data(self, file_csv, img_name, all_joints, all_carts,yolo_midpoints,our_midpoints):
         
-        df = pd.read_csv(file_csv)
+        
 
-        try:
-            idx = df.index[-1] + 1
-        except:
-            idx = 0
+        pallet_info = len(all_joints)
 
-        file = "images/" + img_name
+        for pal_idx in range(pallet_info):
 
-        df.loc[idx] = [file,all_joints,yolo_midpoints,our_midpoints]
+            with open(file_csv, 'a') as f_object:
+ 
+                # Pass this file object to csv.writer()
+                # and get a writer object
+                writer_object = writer(f_object)
+            
+                # Pass the list as an argument into
+                # the writerow()
+                writer_object.writerow([img_name,all_joints[pal_idx],all_carts[pal_idx],yolo_midpoints[pal_idx],our_midpoints[pal_idx]])
+            
+                # Close the file object
+                f_object.close()
+            
+        
+        
 
-        df.to_csv(file_csv,index=False)
+        # df = pd.read_csv(file_csv)
+
+        # try:
+        #     idx = df.index[-1] + 1
+        # except:
+        #     idx = 0
+
+        # file = "images/" + img_name
+
+        # df.loc[idx] = [file,all_joints,all_carts,yolo_midpoints,our_midpoints]
+
+        # df.to_csv(file_csv,index=False)
 
     def parse_joints(self,joints):
 
@@ -102,14 +125,20 @@ class Data_Collector:
 
         return parsed_joints[0:-1]
 
-    def parse_carts(self,carts):
+    def parse_carts(self,carts_and_pose):
 
         parsed_carts = ""
+        parsed_pose  = ""
+        carts = carts_and_pose[0]
+        pose  = carts_and_pose[1]
 
         for c in carts:
-            parse_carts+=str(c)+"_"
+            parsed_carts+=str(c)+"_"
         
-        return parse_carts[0:-1]
+        for p in pose:
+            parsed_pose +=str(p) + "_"
+        
+        return str([parsed_carts[0:-1],parsed_pose[0:-1]])
     
 
 
