@@ -7,18 +7,22 @@ def get_console_args():
 	parser = argparse.ArgumentParser(prog="AI Models",description="Sentiment Anaylsis Training")
 
 
-	parser.add_argument("--modelname",      type=str ,   	choices=["baseline","experiment1","experiment2"], help="This is the modelname you want to do")
+	parser.add_argument("--modelname",      type=str ,   	choices=["baseline","experiment1","experiment2","experiment3","experiment4","experiment5"], help="This is the modelname you want to do")
 	parser.add_argument("--epochs",         type=int , 		default=config.DEFAULTS["epochs"], help="Number of itterations through dataset")
 	parser.add_argument("--lr",             type=float, 	default=config.DEFAULTS["lrate"], help="Learning rate for model")
 	parser.add_argument("--optimizer",      type=str ,		choices=["Adam","SGD","AdamW"], help="Optimizer you want")
 	parser.add_argument("--hidden_size",    type=int ,  	help="Hidden size")
-	parser.add_argument("--vocab_size",     type=int ,  	help="Number of unique tokens")
-	parser.add_argument("--embedding_size", type=int ,      help="size of the embedding")
-	parser.add_argument("--max_seq_length", type=int , 		default=config.DEFAULTS["max_seq_length"], help="The sequence lenght")
+	parser.add_argument("--activation",     type=str ,  	choices=["Sigmoid","Relu","LRelu"], help="Which activation functions to be used")
 	parser.add_argument("--loss_fn",        type=str ,      choices=["CrossEntropy", "MSE"],	help="Loss function you are choosing")
-	parser.add_argument("--num_labels",     type=int ,    	default=config.DEFAULTS["num_labels"], help="Number of Labels in dataset")
 	parser.add_argument("--num_layers",     type=int ,    	default=config.DEFAULTS["num_layers"], help="Number of layers in neural net")
 	parser.add_argument("--dropout",        type=float ,    default=config.DEFAULTS["dropout"], help="Dropout for nueral net")
+	parser.add_argument("--train_images",   type=str ,      required=True, help="The filepath to the images folder")
+	parser.add_argument("--val_images",     type=str ,      required=True, help="The filepath to the validation images folder")
+	parser.add_argument("--train_labels",   type=str ,      required=True, help="The filepath to the label csv")
+	parser.add_argument("--val_labels",     type=str ,      required=True, help="The filepath to the validation label csv")
+	parser.add_argument("--batch_size",     type=int ,      help="The amount of images per batch (range 16 - 64)")
+	parser.add_argument("--weight_decay",   type=float ,    help="A regularization technique used to prevent over fitting (range 0.0 - 1.0)")
+
 	
 	kwargs = parser.parse_args()
 
