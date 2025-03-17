@@ -2,25 +2,54 @@ import torch
 
 class FeedForwardNN(torch.nn.Module):
 	
-	def __init__ (self, classes = None, hidden_size = None , vocab_size = None , embedding_dim = None , **kwargs):
+	def __init__ (self, hidden_size = None, num_layers = None, dropout = False, dropout_num = None, activation = None , **kwargs):
 		super(FeedForwardNN,self).__init__()
+
 		
-		self.embeddings = torch.nn.Embedding(num_embeddings = vocab_size , embedding_dim = embedding_dim)
-		self.fc1  		= torch.nn.Linear(embedding_dim  , hidden_size)
-		self.fc2  		= torch.nn.Linear(hidden_size , hidden_size)
-		self.fc3  		= torch.nn.Linear(hidden_size , classes)
+		self.seq = torch.nn.Sequential(
+			torch.nn.Linear(2, hidden_size)
+		)
+
+		if activation:
+			act = None
+			if activation == 'Sigmoid':
+				act = torch.nn.Sigmoid()
+			elif activation == 'Relu':
+				act = torch.nn.ReLU()
+			else:
+				act = torch.nn.LeakyReLU()
+			for i in range(num_layers - 2):
+				self.seq = torch.nn.Sequential(
+					self.seq,
+					act,
+					
+					torch.nn.Linear(hidden_size, hidden_size)
+				)
+			self.seq = torch.nn.Sequential(
+				self.seq,
+				act,
+				torch.nn.Linear(hidden_size, 6)
+			)
+		else:
+			for i in range(num_layers - 2):
+				self.seq = torch.nn.Sequential(
+					self.seq,
+					torch.nn.Linear(hidden_size, hidden_size)
+				)
+			self.seq = torch.nn.Sequential(
+				self.seq,
+				torch.nn.Linear(hidden_size, 6)
+			)
+
+
+
+
 		
-		self.relu 		= torch.nn.ReLU() 
+		
 
 	def forward (self , input = None , **kwargs):
-		
-		embeddings = self.embeddings(input)
-	
-		output = self.fc1(embeddings)
-		output = self.fc2(output)
-		output = self.fc3(self.relu(output))
 
-		return output
+		return self.seq(input)
 
 
 
