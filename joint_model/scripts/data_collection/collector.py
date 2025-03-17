@@ -11,7 +11,6 @@ import numpy   as np
 import pandas as pd
 from PIL import Image
 from ultralytics import YOLO
-import data_collection.calibri as cal
 import matplotlib.pyplot as plt
 
 
@@ -40,16 +39,7 @@ class Data_Collector:
             cap.release()
             cv.destroyAllWindows()
             return None
-        #else:       
-            
-           # success = cv.imwrite(abs_path,frame)
-            
-           # if success:
-           #     print(f"Image successfully saved to {abs_path}")
-               
-           # else:
-           #     print(f"An error occured. The image was not able to be captured.")
-                             
+          
         cap.release()
         cv.destroyAllWindows()
         return np.asarray(frame)
