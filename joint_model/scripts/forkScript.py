@@ -23,17 +23,19 @@ try:
 except:
       print(f"Unable to connect!")
       exit()
-      
-
+    
+obj = Data_Collector()
 #R.set_cartesian([[-62.76, 415.21, 173.48], [0.002, 0.039, -0.711, -0.702]])
 #R.set_joints([32.8,32.49,9.95,-66.21,-68.98,132.6])
 # [, back&front,]
 #R.set_joints([32.8,32.49,9.95,-66.21,-68.98,132.6]) 
-#R.set_cartesian([[100.44, 310.92, 182.91], [0.032, -0.005, 0.713, 0.701]])
+parsed_carts = obj.parsed_carts(R.set_cartesian([[-292.34, 304.76, 361.17], [0.01, 0.009, -0.694, -0.72]]))
+#R.set_joints([141.28,25.54,21.9,56.72,-65.82,55.6])
 try:
+    print(parse_carts)
     #R.set_joints([32.8,32.49,9.95,-66.21,-68.98,132.6])
-    print(f"Checking {str(R.get_cartesian())}")
-    print(f"Checking {str(R.get_joints())}")
+    #print(f"Checking {str(R.get_cartesian())}")
+    # print(f"Checking {str(R.get_joints())}")
 except:
     R.close()
     exit()

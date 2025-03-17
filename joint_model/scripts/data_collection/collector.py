@@ -40,16 +40,7 @@ class Data_Collector:
             cap.release()
             cv.destroyAllWindows()
             return None
-        #else:       
-            
-           # success = cv.imwrite(abs_path,frame)
-            
-           # if success:
-           #     print(f"Image successfully saved to {abs_path}")
-               
-           # else:
-           #     print(f"An error occured. The image was not able to be captured.")
-                             
+
         cap.release()
         cv.destroyAllWindows()
         return np.asarray(frame)
@@ -107,9 +98,18 @@ class Data_Collector:
         parsed_joints = ""
 
         for j in joints:
-            parsed_joints += str(j)+"-"
+            parsed_joints += str(j)+"_"
 
         return parsed_joints[0:-1]
+
+    def parse_carts(self,carts):
+
+        parsed_carts = ""
+
+        for c in carts:
+            parse_carts+=str(c)+"_"
+        
+        return parse_carts[0:-1]
     
 
 

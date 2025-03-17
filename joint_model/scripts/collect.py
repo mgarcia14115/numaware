@@ -62,6 +62,7 @@ else:
     all_joints      = [] # This list will store the joints for all predictions
     yolo_midpoints  = [] # All of midpoints 
     our_midpoints   = [] 
+    all_carts
     
 
     for r in results:
@@ -109,21 +110,21 @@ else:
                 print(f"The robot is not in programatic mode.")
                 exit()
             
-
+                
             joints = obj.parse_joints(R.get_joints())
             print(f"The following Joints where recorded: {joints}\n\n\n")
             
             carts_pose = R.get_cartesian()
             carts = carts_pose[0]
             pose  = carts_pose[1]
-            carts[1] = carts[1] - 70 # Move arm back
+            carts[1] = carts[1] - 60 # Move arm back
 
             
-            try:
-                R.set_cartesian([carts,pose])
-            except:
-                print(f"Error moving cartesians back")
-                exit()
+            # try:
+            #     #R.set_cartesian([carts,pose])
+            # except:
+            #     print(f"Error moving cartesians back")
+            #     exit()
 
             carts_pose = R.get_cartesian()
             carts = carts_pose[0]
@@ -132,7 +133,7 @@ else:
             if carts[0] < -50: 
                 carts[0] = carts[0] + 600 # Move arm left
             elif carts[0] < 90:
-                carts[0] = carts[0] + 350 # Move arm left
+                carts[0] = carts[0] + 300 # Move arm left
             else:
                 carts[0] = carts[0] + 100
 
@@ -144,7 +145,7 @@ else:
 
 
             try:              
-                R.set_joints([29.31, 33.75, 8.87, -68.86, -71.42, 133.47]) # Move to starting location
+               R.set_cartesian([[364.01, 277, 364.08], [0.01, 0.009, -0.694, -0.72]]) # Move to starting location
             except:
                  print(f"Error moving joints")
                  exit()
