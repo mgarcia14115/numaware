@@ -4,3 +4,18 @@ __pycache__/
 
 # Ignore virtual environment directories
 .venv/
+
+
+local/*
+!local/deleteme.txt
+
+data/processed/*
+!data/processed/deleteme.txt
+
+data/raw/*
+!data/raw/deleteme.txt
+data/raw/joint_model_data/
+
+data/staging/*
+!data/staging/deleteme.txt
+
