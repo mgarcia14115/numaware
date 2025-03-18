@@ -77,7 +77,7 @@ else:
             x_mid ,y_mid = obj.midpoint(xyxy)
             x_mid = round(x_mid,3)
             y_mid = round(y_mid,3)
-            yolo_midpoints.append([str(x_mid) +"_" +str(y_mid)+":"+str(cls)])
+            yolo_midpoints.append([str(x_mid) +"_" +str(y_mid)+"_"+str(cls)])
 
 
             x2_mid = 0.0
@@ -141,7 +141,7 @@ else:
                  exit()
             R.close()
             #########################################
-            all_joints.append([joints+":"+str(cls)])
+            all_joints.append([joints+"_"+str(cls)])
             all_carts.append([cartesians_and_pose+"_"+ str(cls)])
             our_midpoints.append([str(x2_mid) +"_" +str(y2_mid)+"_"+str(cls)])
 

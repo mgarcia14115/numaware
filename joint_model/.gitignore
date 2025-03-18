@@ -14,7 +14,6 @@ data/processed/*
 
 data/raw/*
 !data/raw/deleteme.txt
-data/raw/joint_model_data/
 
 data/staging/*
 !data/staging/deleteme.txt
