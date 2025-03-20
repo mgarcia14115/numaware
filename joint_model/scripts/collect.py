@@ -125,7 +125,7 @@ else:
             elif carts[0] < 90:
                 carts[0] = carts[0] + 300 # Move arm left
             else:
-                carts[0] = carts[0] + 100
+                carts[0] = carts[0] + 100 # Move arm left
 
             try:
                 R.set_cartesian([carts,pose])

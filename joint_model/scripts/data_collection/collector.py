@@ -101,7 +101,7 @@ class Data_Collector:
                 f_object.close()
             
         
-        
+            
 
         # df = pd.read_csv(file_csv)
 
