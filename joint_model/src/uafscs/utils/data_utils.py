@@ -32,7 +32,7 @@ def strList_to_floatList(series,carts):
 
     
 
-class joint_dataset(Dataset):
+class UADataset(Dataset):
 
     def __init__(self,imgs_pth,csv_file):
         
@@ -40,6 +40,7 @@ class joint_dataset(Dataset):
         
         self.imgs_pth       = imgs_pth
         self.joints         = torch.tensor(strList_to_floatList(df["joints"],False))
+        self.carts          = torch.tensor(strList_to_floatList(df["cartesians"],True))
         self.yolo_midpoints = torch.tensor(strList_to_floatList(df["yolo_midpoint"],False))
         self.our_midpoints  = torch.tensor(strList_to_floatList(df["our_midpoint"],False))
         self.img_names      = df["img"]
@@ -50,40 +51,42 @@ class joint_dataset(Dataset):
     
     def __get_item__(self,idx):
 
-        joint         = self.joints[idx]
-        yolo_midpoint = self.yolo_midpoints[idx]
-        our_midpoint  = self.our_midpoints[idx]
-        img           = tv.io.read_image(os.path.join(self.imgs_pth,self.img_names[idx]))
-        img           = tv.transforms.Resize((640,480))(img)
-        img           = img/255
-        return img,yolo_midpoint,our_midpoint,joint
-
-
-
-
-
-class cartesian_dataset(Dataset):
-    def __init__(self,imgs_pth,csv_file):
-        
-        df = pd.read_csv(csv_file)
-        
-        self.imgs_pth       = imgs_pth
-        self.carts          = torch.tensor(strList_to_floatList(df["cartesians"],True))
-        self.yolo_midpoints = torch.tensor(strList_to_floatList(df["yolo_midpoint"],False))
-        self.our_midpoints  = torch.tensor(strList_to_floatList(df["our_midpoint"],False))
-        self.img_names      = df["img"]
-        
-    def __len__(self):
-
-        return len(self.carts)
-    
-    def __get_item__(self,idx):
-
+        joints        = self.joints[idx]
         carts         = self.carts[idx]
         yolo_midpoint = self.yolo_midpoints[idx]
         our_midpoint  = self.our_midpoints[idx]
         img           = tv.io.read_image(os.path.join(self.imgs_pth,self.img_names[idx]))
         img           = tv.transforms.Resize((640,480))(img)
         img           = img/255
+        
+        return img,yolo_midpoint,our_midpoint,joints,carts
 
-        return img,yolo_midpoint,our_midpoint,carts
+
+
+
+
+# class cartesian_dataset(Dataset):
+#     def __init__(self,imgs_pth,csv_file):
+        
+#         df = pd.read_csv(csv_file)
+        
+#         self.imgs_pth       = imgs_pth
+#         self.carts          = torch.tensor(strList_to_floatList(df["cartesians"],True))
+#         self.yolo_midpoints = torch.tensor(strList_to_floatList(df["yolo_midpoint"],False))
+#         self.our_midpoints  = torch.tensor(strList_to_floatList(df["our_midpoint"],False))
+#         self.img_names      = df["img"]
+        
+#     def __len__(self):
+
+#         return len(self.carts)
+    
+#     def __get_item__(self,idx):
+
+#         carts         = self.carts[idx]
+#         yolo_midpoint = self.yolo_midpoints[idx]
+#         our_midpoint  = self.our_midpoints[idx]
+#         img           = tv.io.read_image(os.path.join(self.imgs_pth,self.img_names[idx]))
+#         img           = tv.transforms.Resize((640,480))(img)
+#         img           = img/255
+
+#         return img,yolo_midpoint,our_midpoint,carts
