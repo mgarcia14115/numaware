@@ -102,24 +102,50 @@ for file in os.listdir(dir_path):
 
 
 
-with open(data_path,mode='r+', newline='') as csvfile:
-    reader = csv.reader(csvfile)
-    writer = csv.writer(csvfile) # Create writer to append to file
-    next(reader, None)           #Skip the header
-
-    for row in reader:
-        img_name = row[0]
-        original_img = img_name[0:img_name.index(".")]
-        for dir in os.listdir(dir_path): # Iterate throught content of directories
+# with open(data_path,mode='a+', newline='') as csvfile:
+#     reader = csv.reader(csvfile)
+#     writer = csv.writer(csvfile) # Create writer to append to file
+#     next(reader, None)           #Skip the header
+#     csvfile.seek(0, os.SEEK_END)
+#     for row in reader:
+#         img_name = row[0]
+#         original_img = img_name[0:img_name.index(".")] #imgNum
+        
+#         for dir in os.listdir(dir_path): # Iterate throught content of directories
             
-            pth = os.path.join(dir_path,dir)
-            if os.path.isdir(pth): # Subset only folders
-                
-                new_img_name = findImg(os.listdir(pth),original_img) # Find matching image
+#             pth = os.path.join(dir_path,dir)
+#             if os.path.isdir(pth): # Subset only folders                
+#                 new_img_name = findImg(os.listdir(pth),original_img) # Find matching image
+#                 if new_img_name != -1:
+#                     row[0] = os.path.join(dir,new_img_name)
+#                     writer.writerow(row) # append row along with its path
+
+# Open the CSV file for reading first
+with open(data_path, mode='r', newline='') as csvfile:
+    reader = csv.reader(csvfile)
+    rows = list(reader)  # Read all rows into memory
+
+# Now, open the file again in append mode for writing
+with open(data_path, mode='a', newline='') as csvfile:
+    writer = csv.writer(csvfile)  # Create the writer
+
+    # Skip the header if it exists
+    header = rows[0]  # Store header
+    writer.writerow(header)  # Write header (only once)
+    
+    for row in rows[1:]:  # Skip header row and process others
+        img_name = row[0]
+        original_img = img_name[0:img_name.index(".")]  # imgNum
+
+        # Iterate through directories to find matching images
+        for dir in os.listdir(dir_path):
+            pth = os.path.join(dir_path, dir)
+            if os.path.isdir(pth):  # Only directories
+                new_img_name = findImg(os.listdir(pth), original_img)  # Find matching image
                 if new_img_name != -1:
-                    row[0] = os.path.join(dir,new_img_name)
-                    writer.writerow(row) # append row along with its path
-                
+                    row[0] = os.path.join(dir, new_img_name)
+                    writer.writerow(row)  # Append the row along with its new path
+
                 
                 
        
