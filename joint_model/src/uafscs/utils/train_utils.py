@@ -1,173 +1,113 @@
-from tqdm import tqdm
+from tqdm            import tqdm
+from sklearn.metrics import r2_score
 import torch
-import uafscs.utils.metrics_utils	    as metils
-from sklearn.metrics import classification_report
-from uafscs.configs import defaults as config
-import random
-import numpy as np
 
-class UAFSTrainer():
+class UAFSTrainer:
 
-	def __init__( self , 
-			      model        = None , 
-				  optimizer    = None ,
-				  loss_fn      = None ,
-				  train_dataset= None ,
-				  test_dataset = None , 
-				  train_loader = None ,
-				  test_loader  = None ,
-				  epochs       = None ,
-				 **kwargs
-				):
-		self.train_dataset = train_dataset
-		self.test_dataset = test_dataset
-		self.model        = model.to(config.DEVICE)
-		self.optimizer    = optimizer
-		self.loss_fn      = loss_fn
-		self.train_loader = train_loader
-		self.test_loader  = test_loader
-		self.epochs       = epochs
+    def __init__(self,
+                 model              = None,
+                 targets            = None,
+                 midpoints          = None,
+                 lr                 = None,
+                 epochs             = None,
+                 train_dataloader   = None,
+                 test_dataloader    = None,
+                 optimizer          = None,
+                 weight_decay       = None,
+                 dropout            = None,
+                 loss_fn            = None
+                    ):
+        
+        self.model              = model
+        self.targets            = targets
+        self.midpoints          = midpoints
+        self.lr                 = lr
+        self.epochs             = epochs
+        self.train_dataloader   = train_dataloader
+        self.test_dataloader    = test_dataloader
+        self.weight_decay       = weight_decay
+        self.dropout            = dropout
+      
 
-	def train(self):
-		self.model.train()
-		loss_per_epoch = []
-		y_true = []
-		y_pred = []
-		target_names = ["negative" , "neutral" , "positive"]
-		for epoch in range(self.epochs):
-			epoch_loss = 0
-			for batch in tqdm(self.train_loader):
-				inputs = batch["inputs"]
-				labels = batch["labels"]
-				
-				inputs  = inputs.to(config.DEVICE)
-				labels  = labels.to(config.DEVICE)
+        
+        if optimizer.lower() == "adamw":
+            self.optimizer   = torch.optim.AdamW(model.parameters(),lr=self.lr)
+        #Add the rest later        
+        
+        if loss_fn.lower()  == "mse":
 
-				outputs = self.model(inputs)
-				_,idxs  = torch.max(outputs,1)
-
-				y_true.extend(labels.tolist())
-				y_pred.extend(idxs.tolist())
-
-				loss = self.loss_fn(outputs,labels)
-				loss.backward()
-				self.optimizer.step()
-				epoch_loss += loss.item()
-			
-			avg_epoch_loss = epoch_loss / len(self.train_loader)
-
-			loss_per_epoch.append(epoch_loss)
-			
-			print(f"Epoch: {epoch + 1}    Loss: {round(avg_epoch_loss,3)}")
-			print(classification_report(y_true=y_true,y_pred=y_pred,target_names= target_names, zero_division= 0))
-			
-	
-
-	
-		
-	def train_updated(self,batch_size):
-		self.model.train()
-		loss_per_epoch = []
-		y_true = []
-		y_pred = []
-		
-		target_names = ["negative" , "neutral" , "positive"]
-		for epoch in range(self.epochs):
-			epoch_loss = 0
+            self.loss_fn = torch.nn.MSELoss()
+        
+        
 
 
-			batches = list(range(len(self.train_dataset))) # -> train_dataset = 10 ,,, [0,1,2,3,4,5,6,7,8,9] = batches
-			random.shuffle(batches)
-			batches = np.array_split(batches, len(batches) // batch_size)
+    def train(self):
 
-			for idx,batch in tqdm(enumerate(batches), total=len(batches), desc=f"Batch Progress (Epoch {epoch+1})", unit="batch"):
-				batch_loss = 0
-				for i in batch:
-					text,label = self.train_dataset[i]
-					text  = text.to(config.DEVICE)
-					label  = label.to(config.DEVICE)
-					output = self.model(text)
-					
-					_,idxs  = torch.max(output,0)
-					
-					y_true.extend(label.tolist())
-					y_pred.append(int(idxs))
-					
-					loss = self.loss_fn(output.unsqueeze(0),label)
-					batch_loss+= loss
-				batch_loss.backward()
-				self.optimizer.step()
-				self.optimizer.zero_grad()
-				epoch_loss += batch_loss.item() / len(batch)
+        self.model.train()
 
-			print(f"Epoch: {epoch + 1}    Loss: {round(epoch_loss,3)}")
-			print(classification_report(y_true=y_true,y_pred=y_pred,target_names= target_names, zero_division= 0))
-			
+        
+        for epoch in range(self.epochs):
+            y_true=[]
+            y_pred=[]
+            for batch in tqdm(self.train_dataloader):
+             
+                img           = batch[0]
+                
+                midpoints     = None
+                targets       = None
+                if self.midpoints.lower() == "yolo":  # Check if user wants to use yolo midpoints
+                    midpoints = batch[1]              # Using yolo midpoints
+                else: 
+                    midpoints  = batch[2]             # Using our midpoints
+                
+                if self.targets.lower() == "joints":  # Check if user wants to user joints as targets
+                    targets = batch[3]                # Use joints as targets
+                else:
+                    targets = batch[4]                # Use Cartesians as targets
+                
+                self.optimizer.zero_grad()
 
+                predictions = self.model(img,midpoints)
 
-	def eval(self):
-		self.model.eval()
-		with torch.no_grad():
-			y_true = []
-			y_pred = []
+                loss        = self.loss_fn(predictions,targets)
 
-			final_loss = 0
-			target_names = ["negative" , "neutral" , "positive"]
-			for batch in tqdm(self.test_loader):
-				inputs = batch["inputs"]
-				labels = batch["labels"]
-				
-				inputs  = inputs.to(config.DEVICE)
-				labels  = labels.to(config.DEVICE)
+                loss.backward()
 
-				outputs = self.model(inputs) 
+                self.optimizer.step()
+                y_true.extend(targets.detach())
+                y_pred.extend(predictions.detach())
 
-				loss 	= self.loss_fn(outputs,labels)
-				_,idxs  = torch.max(outputs,1)
+                
+                
+            print(f"Epoch: {epoch + 1}   Training Loss: {round(float(loss.item()),4)}  Training R2 score: {r2_score(y_true,y_pred)} ")
+            
+    def eval(self):
+        
+        self.model.eval()
+        y_true=[]
+        y_pred=[]
+        
+        with torch.no_grad():
+            for batch in tqdm(self.test_dataloader):
 
-				final_loss += loss.item()
+                img           = batch[0]
+                midpoints     = None
+                targets       = None
+                if self.midpoints.lower() == "yolo":
+                    midpoints = batch[1]
+                else: 
+                    midpoints  = batch[2]
+                
+                if self.targets.lower() == "joints":
+                    targets = batch[3]
+                else:
+                    targets = batch[4]
 
-				y_true.extend(labels.tolist())
-				y_pred.extend(idxs.tolist())
-			
-			avg_loss     = final_loss / len(self.test_loader)
-			
-			print(f"Loss: {avg_loss} \n")
-			print(classification_report(y_true=y_true,y_pred=y_pred,target_names= target_names, zero_division= 0))
-			
-			report_dict = metils.get_metric_report(y_pred=y_pred,y_true=y_true,target_names=target_names)
+                predictions = self.model(img,midpoints)
 
-			return avg_loss,report_dict
-		
-	def eval_updated(self):
+                loss        = self.loss_fn(predictions,targets)
+                y_true.extend(targets.detach())
+                y_pred.extend(predictions.detach())
+                
 
-		self.model.eval()
-
-		with torch.no_grad():
-			y_true = []
-			y_pred = []
-
-			final_loss = 0
-			target_names = ["negative" , "neutral" , "positive"]
-
-			for i in tqdm(range(len(self.test_dataset)), desc="Evaluating", ncols=100):
-				text,label = self.test_dataset[i]
-				text  = text.to(config.DEVICE)
-				label  = label.to(config.DEVICE)
-				outputs = self.model(text)
-
-				loss = self.loss_fn(outputs.unsqueeze(0),label)
-				_,idxs  = torch.max(outputs,0)
-
-				final_loss += loss.item()
-
-				y_true.extend(label.tolist())
-				y_pred.append(int(idxs))
-			avg_loss     = final_loss / len(self.test_dataset)
-			print(f"Loss: {avg_loss} \n")
-			print(classification_report(y_true=y_true,y_pred=y_pred,target_names= target_names, zero_division= 0))
-			
-			report_dict = metils.get_metric_report(y_pred=y_pred,y_true=y_true,target_names=target_names)
-
-			return avg_loss,report_dict
-
+            print(f"Test Loss: {loss.item()}  Test R2 score: {r2_score(y_true,y_pred)} ")
