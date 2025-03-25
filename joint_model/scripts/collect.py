@@ -70,8 +70,8 @@ else:
         for box in boxes:
             cls = box.cls.item()
             
-            # Get bounding box coordinates in (x1, y1, x2, y2) format            
-            xyxy = box.xyxy[0]
+                       
+            xyxy = box.xyxy[0] # Get bounding box coordinates in (x1, y1, x2, y2) format 
             x_mid ,y_mid = obj.midpoint(xyxy)
             x_mid = round(x_mid,3)
             y_mid = round(y_mid,3)
@@ -112,26 +112,6 @@ else:
             joints              = obj.parse_joints(R.get_joints())
             print(f"The following Joints where recorded: {joints}\n\n\n")
             
-
-
-            # carts_pose = R.get_cartesian()
-            # carts = carts_pose[0]
-            # pose  = carts_pose[1]
-
-            # if carts[0] < -50: 
-            #     carts[0] = carts[0] + 600 # Move arm left
-            # elif carts[0] < 90:
-            #     carts[0] = carts[0] + 300 # Move arm left
-            # else:
-            #     carts[0] = carts[0] + 100
-
-            # try:
-            #     R.set_cartesian([carts,pose])
-            # except:
-            #     print(f"Error moving cartesians left")
-            #     exit()
-
-
           
             R.close()
             #########################################
