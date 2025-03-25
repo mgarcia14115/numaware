@@ -14,7 +14,6 @@ class UAFSTrainer:
                  test_dataloader    = None,
                  optimizer          = None,
                  weight_decay       = None,
-                 dropout            = None,
                  loss_fn            = None
                     ):
         
@@ -26,8 +25,7 @@ class UAFSTrainer:
         self.train_dataloader   = train_dataloader
         self.test_dataloader    = test_dataloader
         self.weight_decay       = weight_decay
-        self.dropout            = dropout
-      
+       
 
         
         if optimizer.lower() == "adamw":
