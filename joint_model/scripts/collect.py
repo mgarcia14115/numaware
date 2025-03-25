@@ -66,14 +66,12 @@ else:
     
 
     for r in results:
-        boxes = r.boxes
-        idx = 0
+        boxes = r.boxes        
         for box in boxes:
             cls = box.cls.item()
             
-            # Get bounding box coordinates in (x1, y1, x2, y2) format
-            
-            xyxy = box.xyxy[idx]
+            # Get bounding box coordinates in (x1, y1, x2, y2) format            
+            xyxy = box.xyxy[0]
             x_mid ,y_mid = obj.midpoint(xyxy)
             x_mid = round(x_mid,3)
             y_mid = round(y_mid,3)
@@ -116,34 +114,45 @@ else:
             
 
 
-            carts_pose = R.get_cartesian()
-            carts = carts_pose[0]
-            pose  = carts_pose[1]
+            # carts_pose = R.get_cartesian()
+            # carts = carts_pose[0]
+            # pose  = carts_pose[1]
 
-            if carts[0] < -50: 
-                carts[0] = carts[0] + 600 # Move arm left
-            elif carts[0] < 90:
-                carts[0] = carts[0] + 300 # Move arm left
-            else:
-                carts[0] = carts[0] + 100 # Move arm left
+            # if carts[0] < -50: 
+            #     carts[0] = carts[0] + 600 # Move arm left
+            # elif carts[0] < 90:
+            #     carts[0] = carts[0] + 300 # Move arm left
+            # else:
+            #     carts[0] = carts[0] + 100
 
-            try:
-                R.set_cartesian([carts,pose])
-            except:
-                print(f"Error moving cartesians left")
-                exit()
+            # try:
+            #     R.set_cartesian([carts,pose])
+            # except:
+            #     print(f"Error moving cartesians left")
+            #     exit()
 
 
-            try:              
-               R.set_cartesian([[364.01, 277, 364.08], [0.01, 0.009, -0.694, -0.72]]) # Move to starting location
-            except:
-                 print(f"Error to start position")
-                 exit()
+          
             R.close()
             #########################################
             all_joints.append([joints+"_"+str(cls)])
             all_carts.append([cartesians_and_pose+"_"+ str(cls)])
             our_midpoints.append([str(x2_mid) +"_" +str(y2_mid)+"_"+str(cls)])
+            
 
+
+    try:
+        R = Robot(ip='192.168.125.1')
+    except:
+        print(f"The robot is not in programatic mode.")
+        exit()
+
+        
+    try:              
+        R.set_cartesian([[364.01, 277, 364.08], [0.01, 0.009, -0.694, -0.72]]) # Move to starting location
+    except:
+            print(f"Error to start position")
+            exit()
+    R.close()
     cv.imwrite(os.path.join(imgs_dir_path,img_name),img)
     obj.save_data(data_file_path,img_name,all_joints,all_carts,yolo_midpoints,our_midpoints)
