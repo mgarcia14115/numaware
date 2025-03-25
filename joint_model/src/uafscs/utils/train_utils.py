@@ -25,22 +25,34 @@ class UAFSTrainer:
         self.epochs             = epochs
         self.train_dataloader   = train_dataloader
         self.test_dataloader    = test_dataloader
-        self.optimizer          = optimizer
         self.weight_decay       = weight_decay
         self.dropout            = dropout
-        self.loss_fn            = loss_fn
+      
+
+        
+        if optimizer.lower() == "adamw":
+            self.optimizer   = torch.optim.AdamW(model.parameters(),lr=self.lr)
+        #Add the rest later        
+        
+        if loss_fn.lower()  == "mse":
+
+            self.loss_fn = torch.nn.MSELoss()
+        
+        
+
 
     def train(self):
 
         self.model.train()
 
-        y_true=[]
-        y_pred=[]
+        
         for epoch in range(self.epochs):
-
+            y_true=[]
+            y_pred=[]
             for batch in tqdm(self.train_dataloader):
-
+             
                 img           = batch[0]
+                
                 midpoints     = None
                 targets       = None
                 if self.midpoints.lower() == "yolo":  # Check if user wants to use yolo midpoints
@@ -94,6 +106,8 @@ class UAFSTrainer:
                 predictions = self.model(img,midpoints)
 
                 loss        = self.loss_fn(predictions,targets)
+                y_true.extend(targets.detach())
+                y_pred.extend(predictions.detach())
                 
 
             print(f"Test Loss: {loss.item()}  Test R2 score: {r2_score(y_true,y_pred)} ")

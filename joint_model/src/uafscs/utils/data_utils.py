@@ -1,4 +1,3 @@
-from torch.utils.data import Dataset
 import pandas as pd
 import torch
 import torchvision as tv
@@ -32,12 +31,12 @@ def strList_to_floatList(series,isCarts):
 
     
 
-class UADataset(Dataset):
+class UADataset(torch.utils.data.Dataset):
 
     def __init__(self,imgs_pth,csv_file):
-        
+     
         df = pd.read_csv(csv_file)
-        
+       
         self.imgs_pth       = imgs_pth
         self.joints         = torch.tensor(strList_to_floatList(df["joints"],False))
         self.carts          = torch.tensor(strList_to_floatList(df["cartesians"],True))
@@ -49,8 +48,8 @@ class UADataset(Dataset):
 
         return len(self.joints)
     
-    def __get_item__(self,idx):
-
+    def __getitem__(self,idx):
+  
         joints        = self.joints[idx]
         carts         = self.carts[idx]
         yolo_midpoint = self.yolo_midpoints[idx]
@@ -58,7 +57,7 @@ class UADataset(Dataset):
         img           = tv.io.read_image(os.path.join(self.imgs_pth,self.img_names[idx]))
         img           = tv.transforms.Resize((640,480))(img)
         img           = img/255
-        
+     
         return img,yolo_midpoint,our_midpoint,joints,carts
 
 
