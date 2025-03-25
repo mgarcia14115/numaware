@@ -8,11 +8,6 @@ while os.getcwd() != "/" and ".gitignore" not in os.listdir(os.getcwd()):
 print("Current Working Directory:  ", os.getcwd())
 import cv2     as cv
 import numpy   as np
-import pandas as pd
-from PIL import Image
-from ultralytics import YOLO
-import data_collection.calibri as cal
-import matplotlib.pyplot as plt
 from csv import writer
 
 
@@ -24,9 +19,7 @@ class Data_Collector:
         self.imgs_dir_path = imgs_dir_path
      
     
-    def take_image(self, img_name , cam_idx):
-
-        abs_path = os.path.join(self.imgs_dir_path,img_name)
+    def take_image(self,cam_idx):
 
         cap = cv.VideoCapture(cam_idx)
         
@@ -81,8 +74,6 @@ class Data_Collector:
     
     def save_data(self, file_csv, img_name, all_joints, all_carts,yolo_midpoints,our_midpoints):
         
-        
-
         pallet_info = len(all_joints)
 
         for pal_idx in range(pallet_info):
@@ -100,21 +91,7 @@ class Data_Collector:
                 # Close the file object
                 f_object.close()
             
-        
-            
 
-        # df = pd.read_csv(file_csv)
-
-        # try:
-        #     idx = df.index[-1] + 1
-        # except:
-        #     idx = 0
-
-        # file = "images/" + img_name
-
-        # df.loc[idx] = [file,all_joints,all_carts,yolo_midpoints,our_midpoints]
-
-        # df.to_csv(file_csv,index=False)
 
     def parse_joints(self,joints):
 

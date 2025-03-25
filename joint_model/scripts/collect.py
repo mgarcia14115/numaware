@@ -5,7 +5,6 @@ while os.getcwd() != "/" and ".gitignore" not in os.listdir(os.getcwd()):
 		print("COULD NOT FIND gitignore.  Invalid project base file.")
 print("Current Working Directory:  ", os.getcwd())
 import  sys
-from    PIL                             import Image
 import matplotlib
 matplotlib.use('TkAgg')
 import cv2                              as cv
@@ -47,7 +46,7 @@ else:
     
     response = "n"                                                      # Current response is no to initiate the while loop 
     while(response != "y"):                                             # Keep asking until response is yes
-        img = obj.take_image(img_name,cam_idx)                          # Take an image
+        img = obj.take_image(cam_idx)                                   # Take an image
         model(source = img,conf = .6,show=True)                         # Make a prediction and display it
         print(f"Did all classes get predicted correctly? Enter [y|n]")  # ask user if it was correctly labeled
         response = input().lower()                                      # User response
@@ -65,14 +64,18 @@ else:
     all_carts       = []
     
 
+    #When making a prediction you can pass a list of images that will correspond to the list of results. 
+    #In our case we only pass one image so this will only iterate once.
+    #The inner loop will iterate n times if you have n bounding boxes in the image
+
     for r in results:
-        boxes = r.boxes        
-        for box in boxes:
-            cls = box.cls.item()
+        boxes = r.boxes                       # Get all bouding boxes in image
+        for box in boxes:                     # Iterate through bounding box
+            cls = box.cls.item()              # Grab the class of the bounding box
             
                        
-            xyxy = box.xyxy[0] # Get bounding box coordinates in (x1, y1, x2, y2) format 
-            x_mid ,y_mid = obj.midpoint(xyxy)
+            xyxy = box.xyxy[0]                # Get bounding box coordinates in (x1, y1, x2, y2) format 
+            x_mid ,y_mid = obj.midpoint(xyxy) 
             x_mid = round(x_mid,3)
             y_mid = round(y_mid,3)
             yolo_midpoints.append([str(x_mid) +"_" +str(y_mid)+"_"+str(cls)])
@@ -131,8 +134,9 @@ else:
     try:              
         R.set_cartesian([[364.01, 277, 364.08], [0.01, 0.009, -0.694, -0.72]]) # Move to starting location
     except:
-            print(f"Error to start position")
+            print(f"Error moving to start position")
             exit()
     R.close()
+
     cv.imwrite(os.path.join(imgs_dir_path,img_name),img)
     obj.save_data(data_file_path,img_name,all_joints,all_carts,yolo_midpoints,our_midpoints)
