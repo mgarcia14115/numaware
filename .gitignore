@@ -1,0 +1,31 @@
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+
+# Ignore virtual environment directories
+.venv
+
+*.png
+*.json
+*.jpg
+*.jpeg
+*.txt
+*.csv
+*.pt
+*.yaml
+*.cache
+
+
+local/*
+!local/deleteme.txt
+
+data/processed/*
+!data/processed/deleteme.txt
+
+data/raw/*
+!data/raw/deleteme.txt
+data/raw/joint_model_data/
+
+data/staging/*
+!data/staging/deleteme.txt
+
