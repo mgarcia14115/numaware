@@ -112,5 +112,4 @@ class UAFSTrainer:
                 y_true.extend(targets.detach())
                 y_pred.extend(predictions.detach())
                 
-            meutils.save_report(self.model, loss, self.epochs, self.lr, self.optimizer, self.loss_fn, r2_score(y_true, y_pred), "./met.csv" )
-            print(f"Test Loss: {loss.item()}  Test R2 score: {r2_score(y_true,y_pred)} ")
+            meutils.save_report(self.model, loss, self.epochs, self.lr, self.optimizer, self.loss_fn, r2_score(y_true, y_pred), "./model_metrics.csv" )            

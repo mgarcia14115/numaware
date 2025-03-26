@@ -18,6 +18,8 @@ def get_console_args():
 	parser.add_argument("--val_labels",     type=str ,      required=True, help="The filepath to the validation label csv")
 	parser.add_argument("--batch_size",     type=int ,      default=config.DEFAULTS["batch_size"], help="The amount of images per batch (range 16 - 64)")
 	parser.add_argument("--weight_decay",   type=float ,    help="A regularization technique used to prevent over fitting (range 0.0 - 1.0)")
+	parser.add_argument("--target",			type=str,		required=True, choices=["joints", "cartesians"], help="Choose between joints or cartesians for your model")
+	parser.add_argument("--midpoint",		type=str,		required=True, choices=["yolo", "ours"], help="Choose between yolo our our midpoints")
 
 	
 	kwargs = parser.parse_args()

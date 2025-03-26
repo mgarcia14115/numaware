@@ -10,7 +10,7 @@ DEFAULTS = {
 	"lrate": 			0.1,
 	"epochs":			7,
 	"batch_size":		128,
-	"dropout":			0.4,
+	"dropout":			0.0,
 	"num_labels":		3,
 	"max_seq_length":   128,
 	"num_layers":       1,

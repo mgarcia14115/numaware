@@ -8,7 +8,7 @@ import pandas as pd
 from torch.utils.data import DataLoader
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(device)
+print(f"You are using this device:", device)
 
 # Grabs arguments
 args = get_console_args()
@@ -24,6 +24,8 @@ train_labels    = args.train_labels
 test_labels     = args.val_labels
 batch_size      = args.batch_size
 weight_decay    = args.weight_decay
+target          = args.target
+midpoint        = args.midpoint
 
 
 # Grabs data
@@ -38,12 +40,12 @@ train_loader = DataLoader(train_dataset,batch_size=batch_size)
 test_loader = DataLoader(test_dataset, batch_size=batch_size)
 
 # Grab instantiated model
-model = mutils.initialize_model(model_name)
+model = mutils.initialize_model(model_name, dropout)
 
 # Train model
 trainer = tutils.UAFSTrainer(model           = model,
-                            targets          = "carts",
-                            midpoints        = "yolo",
+                            targets          = target,
+                            midpoints        = midpoint,
                             lr               = lr,
                             epochs           = epochs,
                             train_dataloader = train_loader,
@@ -52,7 +54,6 @@ trainer = tutils.UAFSTrainer(model           = model,
                             loss_fn          = loss_fn)
 
 trainer.train()
-
 
 trainer.eval()
 
