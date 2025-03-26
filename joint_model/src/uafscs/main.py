@@ -8,6 +8,7 @@ import pandas as pd
 from torch.utils.data import DataLoader
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(device)
 
 # Grabs arguments
 args = get_console_args()
@@ -37,8 +38,7 @@ train_loader = DataLoader(train_dataset,batch_size=batch_size)
 test_loader = DataLoader(test_dataset, batch_size=batch_size)
 
 # Grab instantiated model
-if model_name == "baseline":
-    model = mutils.initialize_model(model_name)
+model = mutils.initialize_model(model_name)
 
 # Train model
 trainer = tutils.UAFSTrainer(model           = model,

@@ -14,6 +14,8 @@ DEFAULTS = {
 	"num_labels":		3,
 	"max_seq_length":   128,
 	"num_layers":       1,
+    "optimizer":		"adam",
+    "loss_fn":			"mse",
 }
 
 
