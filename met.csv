@@ -1,0 +1,25 @@
+Model Architecture,Epochs,Learning Rate,Optimizer,loss_fn,loss,r2_loss
+"SimpleCNN(
+  (conv1): Conv2d(3, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (pool1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (conv2): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (pool2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (conv3): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (pool3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (fc1): Linear(in_features=307202, out_features=128, bias=True)
+  (fc2): Linear(in_features=128, out_features=3, bias=True)
+  (relu): ReLU()
+  (dropout): Dropout(p=0.5, inplace=False)
+)",2,0.01,"AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    lr: 0.01
+    maximize: False
+    weight_decay: 0.01
+)",MSELoss(),tensor(70646.9062),-209.8787237737339
