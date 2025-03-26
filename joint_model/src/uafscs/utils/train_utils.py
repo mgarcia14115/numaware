@@ -30,10 +30,13 @@ class UAFSTrainer:
         
         if optimizer.lower() == "adamw":
             self.optimizer   = torch.optim.AdamW(model.parameters(),lr=self.lr)
-        #Add the rest later        
+        elif optimizer.lower() == "adam":
+            self.optimizer   = torch.optim.Adam(model.parameters(),lr=self.lr)
+        else:
+            self.optimizer   = torch.optim.SGD(model.parameters(),lr=self.lr)
+
         
         if loss_fn.lower()  == "mse":
-
             self.loss_fn = torch.nn.MSELoss()
         
         
