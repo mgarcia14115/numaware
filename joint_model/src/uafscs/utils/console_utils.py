@@ -7,7 +7,7 @@ def get_console_args():
 	parser = argparse.ArgumentParser(prog="AI Models",description="Sentiment Anaylsis Training")
 
 
-	parser.add_argument("--modelname",      type=str ,   	required=True, choices=["baseline","experiment1","experiment2","experiment3","experiment4","experiment5"], help="This is the modelname you want to do")
+	parser.add_argument("--modelname",      type=str ,   	required=True, help="This is the modelname you want to do")
 	parser.add_argument("--epochs",         type=int , 		default=config.DEFAULTS["epochs"], help="Number of itterations through dataset")
 	parser.add_argument("--lr",             type=float, 	default=config.DEFAULTS["lrate"], help="Learning rate for model")
 	parser.add_argument("--optimizer",      type=str ,		default=config.DEFAULTS["optimizer"], choices=["adam","sgd","adamw"], help="Optimizer you want")
