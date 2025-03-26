@@ -57,3 +57,6 @@ trainer.train()
 
 trainer.eval()
 
+torch.save(model.state_dict(), 'local/' + model_name + '.pt')
+
+
