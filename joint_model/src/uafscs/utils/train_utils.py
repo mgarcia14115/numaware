@@ -1,7 +1,7 @@
 from tqdm            import tqdm
 from sklearn.metrics import r2_score
 import torch
-from joint_model.src.uafscs.utils import metrics_utils		as meutils
+import utils.metric_utils		as meutils
 
 
 class UAFSTrainer:
@@ -112,4 +112,5 @@ class UAFSTrainer:
                 y_true.extend(targets.detach())
                 y_pred.extend(predictions.detach())
                 
-            meutils.save_report(self.model, loss, self.epochs, self.lr, self.optimizer, self.loss_fn, r2_score(y_true, y_pred), "./model_metrics.csv" )            
+            meutils.save_report(self.model, loss, self.epochs, self.lr, self.optimizer, self.loss_fn, r2_score(y_true, y_pred), "./model_metrics.csv" )
+            print(f"Test Loss: {loss.item()}  Test R2 score: {r2_score(y_true,y_pred)} ")
