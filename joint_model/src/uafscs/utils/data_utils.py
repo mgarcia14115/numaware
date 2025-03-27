@@ -58,4 +58,4 @@ class UADataset(torch.utils.data.Dataset):
         img           = tv.transforms.Resize((640,480))(img)
         img           = img/255
      
-        return img.to(self.device),yolo_midpoint.to(self.device),our_midpoint.to(self.device),joints.to(self.device),carts.to(self.device)
+        return img,yolo_midpoint,our_midpoint,joints,carts

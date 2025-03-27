@@ -82,12 +82,12 @@ class UAFSTrainer:
                 loss.backward()
 
                 self.optimizer.step()
-                y_true.extend(targets.detach().cpu())
-                y_pred.extend(predictions.detach().cpu())
+                y_true.extend(targets.detach().cpu().numpy())
+                y_pred.extend(predictions.detach().cpu().numpy())
 
                 
                 
-            print(f"Epoch: {epoch + 1}   Training Loss: {round(float(loss.item()),4)}  Training R2 score: {r2_score(y_true.cpu(),y_pred.cpu())} ")
+            print(f"Epoch: {epoch + 1}   Training Loss: {round(float(loss.item()),4)}  Training R2 score: {r2_score(y_true,y_pred)} ")
             
     def eval(self):
         
@@ -118,8 +118,8 @@ class UAFSTrainer:
                 predictions = self.model(img,midpoints)
 
                 loss        = self.loss_fn(predictions,targets)
-                y_true.extend(targets.detach())
-                y_pred.extend(predictions.detach())
+                y_true.extend(targets.detach().cpu().numpy())
+                y_pred.extend(predictions.detach().cpu().numpy())
                 
             meutils.save_report(self.model, loss, self.epochs, self.lr, self.optimizer, self.loss_fn, r2_score(y_true, y_pred), "./model_metrics.csv" )
-            print(f"Testing Loss: {round(float(loss.item()),4)}  Testing R2 score: {r2_score(y_true.cpu(),y_pred.cpu())} ")
+            print(f"Testing Loss: {round(float(loss.item()),4)}  Testing R2 score: {r2_score(y_true,y_pred)} ")
