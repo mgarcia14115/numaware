@@ -41,7 +41,7 @@ test_loader = DataLoader(test_dataset, batch_size=batch_size)
 
 # Grab instantiated model
 model = mutils.initialize_model(model_name, dropout)
-
+model = model.to(device)
 # Train model
 trainer = tutils.UAFSTrainer(model           = model,
                             targets          = target,

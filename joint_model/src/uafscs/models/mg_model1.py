@@ -2,12 +2,12 @@
 import torch 
 
 
-class MGClassifier(torch.nn.Module):
+class RegWithMid(torch.nn.Module):
 
 
     def __init__(self,dropout):
         
-        super(MGClassifier,self).__init__()
+        super(RegWithMid,self).__init__()
 
        
         self.conv1 = torch.nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=1)  
