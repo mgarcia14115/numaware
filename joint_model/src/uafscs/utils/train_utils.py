@@ -87,7 +87,7 @@ class UAFSTrainer:
 
                 
                 
-            print(f"Epoch: {epoch + 1}   Training Loss: {round(float(loss.item()),4)}  Training R2 score: {r2_score(y_true.cpu(),y_pred.cpu())} ")
+            print(f"Epoch: {epoch + 1}   Training Loss: {round(float(loss.item()),4)}  Training R2 score: {r2_score(y_true,y_pred)} ")
             
     def eval(self):
         
@@ -122,4 +122,4 @@ class UAFSTrainer:
                 y_pred.extend(predictions.detach())
                 
             meutils.save_report(self.model, loss, self.epochs, self.lr, self.optimizer, self.loss_fn, r2_score(y_true, y_pred), "./model_metrics.csv" )
-            print(f"Testing Loss: {round(float(loss.item()),4)}  Testing R2 score: {r2_score(y_true.cpu(),y_pred.cpu())} ")
+            print(f"Testing Loss: {round(float(loss.item()),4)}  Testing R2 score: {r2_score(y_true,y_pred)} ")
