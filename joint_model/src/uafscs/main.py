@@ -32,8 +32,8 @@ midpoint        = args.midpoint
 imgs_dir = "../../data/processed/images"
 
 # Setup dataset
-train_dataset = dutils.UADataset(imgs_dir, train_labels)
-test_dataset = dutils.UADataset(imgs_dir, test_labels)
+train_dataset = dutils.UADataset(imgs_dir, train_labels, device)
+test_dataset = dutils.UADataset(imgs_dir, test_labels, device)
 
 # Setup dataloader
 train_loader = DataLoader(train_dataset,batch_size=batch_size)
@@ -43,7 +43,7 @@ test_loader = DataLoader(test_dataset, batch_size=batch_size)
 model = mutils.initialize_model(model_name, dropout)
 
 # Train model
-trainer = tutils.UAFSTrainer(model           = model,
+trainer = tutils.UAFSTrainer(model           = model.to(device),
                             targets          = target,
                             midpoints        = midpoint,
                             lr               = lr,
