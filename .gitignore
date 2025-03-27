@@ -18,6 +18,8 @@ __pycache__/
 
 local/*
 !local/deleteme.txt
+!joint_model/local/deleteme.txt
+
 
 data/processed/*
 !data/processed/deleteme.txt

@@ -2,7 +2,7 @@ from tqdm            import tqdm
 from sklearn.metrics import r2_score
 import torch
 import utils.metric_utils		as meutils
-
+from configs import defaults as config
 
 class UAFSTrainer:
 
@@ -40,7 +40,8 @@ class UAFSTrainer:
         
         if loss_fn.lower()  == "mse":
             self.loss_fn = torch.nn.MSELoss()
-        
+        if loss_fn.lower()  == "crossentropy":
+            self.loss_fn = torch.nn.CrossEntropyLoss()
         
 
 
@@ -66,8 +67,12 @@ class UAFSTrainer:
                 if self.targets.lower() == "joints":  # Check if user wants to user joints as targets
                     targets = batch[3]                # Use joints as targets
                 else:
-                    targets = batch[4]                # Use Cartesians as targets
-                
+                    targets = batch[4]        # Use Cartesians as targets
+
+                img = img.to(config.DEVICE)
+                midpoints = midpoints.to(config.DEVICE)
+                targets = targets.to(config.DEVICE)
+				
                 self.optimizer.zero_grad()
 
                 predictions = self.model(img,midpoints)
@@ -82,7 +87,7 @@ class UAFSTrainer:
 
                 
                 
-            print(f"Epoch: {epoch + 1}   Training Loss: {round(float(loss.item()),4)}  Training R2 score: {r2_score(y_true,y_pred)} ")
+            print(f"Epoch: {epoch + 1}   Training Loss: {round(float(loss.item()),4)}  Training R2 score: {r2_score(y_true.cpu(),y_pred.cpu())} ")
             
     def eval(self):
         
@@ -106,6 +111,10 @@ class UAFSTrainer:
                 else:
                     targets = batch[4]
 
+                img = img.to(config.DEVICE)
+                midpoints = midpoints.to(config.DEVICE)
+                targets = targets.to(config.DEVICE)
+
                 predictions = self.model(img,midpoints)
 
                 loss        = self.loss_fn(predictions,targets)
@@ -113,4 +122,4 @@ class UAFSTrainer:
                 y_pred.extend(predictions.detach())
                 
             meutils.save_report(self.model, loss, self.epochs, self.lr, self.optimizer, self.loss_fn, r2_score(y_true, y_pred), "./model_metrics.csv" )
-            print(f"Test Loss: {loss.item()}  Test R2 score: {r2_score(y_true,y_pred)} ")
+            print(f"Testing Loss: {round(float(loss.item()),4)}  Testing R2 score: {r2_score(y_true.cpu(),y_pred.cpu())} ")
