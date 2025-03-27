@@ -2,7 +2,7 @@ from tqdm            import tqdm
 from sklearn.metrics import r2_score
 import torch
 import utils.metric_utils		as meutils
-
+from configs import defaults as config
 
 class UAFSTrainer:
 
@@ -67,8 +67,12 @@ class UAFSTrainer:
                 if self.targets.lower() == "joints":  # Check if user wants to user joints as targets
                     targets = batch[3]                # Use joints as targets
                 else:
-                    targets = batch[4]                # Use Cartesians as targets
-                
+                    targets = batch[4]        # Use Cartesians as targets
+
+                img = img.to(config.DEVICE)
+                midpoints = midpoints.to(config.DEVICE)
+                targets = targets.to(config.DEVICE)
+				
                 self.optimizer.zero_grad()
 
                 predictions = self.model(img,midpoints)
@@ -80,7 +84,7 @@ class UAFSTrainer:
                 self.optimizer.step()
                 y_true.extend(targets.detach())
                 y_pred.extend(predictions.detach())
-
+				
                 
                 
             print(f"Epoch: {epoch + 1}   Training Loss: {round(float(loss.item()),4)}  Training R2 score: {r2_score(y_true,y_pred)} ")
@@ -106,6 +110,10 @@ class UAFSTrainer:
                     targets = batch[3]
                 else:
                     targets = batch[4]
+
+                img = img.to(config.DEVICE)
+                midpoints = midpoints.to(config.DEVICE)
+                targets = targets.to(config.DEVICE)
 
                 predictions = self.model(img,midpoints)
 
