@@ -65,6 +65,8 @@ class regression_with_images_midpoints(torch.nn.Module):
             torch.nn.Linear(128, 3),
         )
 
+        
+
     def forward(self, image, mid, **kwargs):
         x = self.conv(image)
         x = torch.flatten(x, start_dim=1) 
