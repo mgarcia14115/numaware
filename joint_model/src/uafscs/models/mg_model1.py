@@ -50,7 +50,7 @@ class Joint_predictor(torch.nn.Module):
 class Cart_predictor(torch.nn.Module):
 
 
-    def __init__(self,dropout,output_layer):
+    def __init__(self,dropout):
 
         super(Cart_predictor,self).__init__()
 
