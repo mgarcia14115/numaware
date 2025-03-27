@@ -1,8 +1,8 @@
 from tqdm            import tqdm
 from sklearn.metrics import r2_score
-from joint_model.src.uafscs.utils import metrics_utils		as meutils
-
 import torch
+import utils.metric_utils		as meutils
+from configs import defaults as config
 
 class UAFSTrainer:
 
@@ -16,7 +16,6 @@ class UAFSTrainer:
                  test_dataloader    = None,
                  optimizer          = None,
                  weight_decay       = None,
-                 dropout            = None,
                  loss_fn            = None
                     ):
         
@@ -28,18 +27,21 @@ class UAFSTrainer:
         self.train_dataloader   = train_dataloader
         self.test_dataloader    = test_dataloader
         self.weight_decay       = weight_decay
-        self.dropout            = dropout
-      
+       
 
         
         if optimizer.lower() == "adamw":
             self.optimizer   = torch.optim.AdamW(model.parameters(),lr=self.lr)
-        #Add the rest later        
+        elif optimizer.lower() == "adam":
+            self.optimizer   = torch.optim.Adam(model.parameters(),lr=self.lr)
+        else:
+            self.optimizer   = torch.optim.SGD(model.parameters(),lr=self.lr)
+
         
         if loss_fn.lower()  == "mse":
-
             self.loss_fn = torch.nn.MSELoss()
-        
+        if loss_fn.lower()  == "crossentropy":
+            self.loss_fn = torch.nn.CrossEntropyLoss()
         
 
 
@@ -65,8 +67,12 @@ class UAFSTrainer:
                 if self.targets.lower() == "joints":  # Check if user wants to user joints as targets
                     targets = batch[3]                # Use joints as targets
                 else:
-                    targets = batch[4]                # Use Cartesians as targets
-                
+                    targets = batch[4]        # Use Cartesians as targets
+
+                img = img.to(config.DEVICE)
+                midpoints = midpoints.to(config.DEVICE)
+                targets = targets.to(config.DEVICE)
+				
                 self.optimizer.zero_grad()
 
                 predictions = self.model(img,midpoints)
@@ -76,19 +82,18 @@ class UAFSTrainer:
                 loss.backward()
 
                 self.optimizer.step()
-                y_true.extend(targets.detach())
-                y_pred.extend(predictions.detach())
+                y_true.extend(targets.detach().cpu())
+                y_pred.extend(predictions.detach().cpu())
 
                 
                 
-            print(f"Epoch: {epoch + 1}   Training Loss: {round(float(loss.item()),4)}  Training R2 score: {r2_score(y_true,y_pred)} ")
+            print(f"Epoch: {epoch + 1}   Training Loss: {round(float(loss.item()),4)}  Training R2 score: {r2_score(y_true.cpu(),y_pred.cpu())} ")
             
     def eval(self):
         
         self.model.eval()
         y_true=[]
         y_pred=[]
-        loss = 0
         
         with torch.no_grad():
             for batch in tqdm(self.test_dataloader):
@@ -106,13 +111,15 @@ class UAFSTrainer:
                 else:
                     targets = batch[4]
 
+                img = img.to(config.DEVICE)
+                midpoints = midpoints.to(config.DEVICE)
+                targets = targets.to(config.DEVICE)
+
                 predictions = self.model(img,midpoints)
 
                 loss        = self.loss_fn(predictions,targets)
                 y_true.extend(targets.detach())
                 y_pred.extend(predictions.detach())
                 
-            meutils.save_report(self.model, loss, self.epochs, self.lr, self.optimizer, self.loss_fn, r2_score(y_true, y_pred), "./met.csv" )
-            print("here")
-            print(f"Test Loss: {loss.item()}  Test R2 score: {r2_score(y_true,y_pred)} ")
-            
+            meutils.save_report(self.model, loss, self.epochs, self.lr, self.optimizer, self.loss_fn, r2_score(y_true, y_pred), "./model_metrics.csv" )
+            print(f"Testing Loss: {round(float(loss.item()),4)}  Testing R2 score: {r2_score(y_true.cpu(),y_pred.cpu())} ")
