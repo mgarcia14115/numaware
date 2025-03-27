@@ -40,7 +40,8 @@ class UAFSTrainer:
         
         if loss_fn.lower()  == "mse":
             self.loss_fn = torch.nn.MSELoss()
-        
+        if loss_fn.lower()  == "crossentropy":
+            self.loss_fn = torch.nn.CrossEntropyLoss()
         
 
 
