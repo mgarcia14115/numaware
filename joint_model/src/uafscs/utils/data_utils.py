@@ -33,10 +33,10 @@ def strList_to_floatList(series,isCarts):
 
 class UADataset(torch.utils.data.Dataset):
 
-    def __init__(self,imgs_pth,csv_file):
+    def __init__(self,imgs_pth,csv_file, device):
      
         df = pd.read_csv(csv_file)
-       
+        self.device = device
         self.imgs_pth       = imgs_pth
         self.joints         = torch.tensor(strList_to_floatList(df["joints"],False))
         self.carts          = torch.tensor(strList_to_floatList(df["cartesians"],True))
@@ -58,4 +58,4 @@ class UADataset(torch.utils.data.Dataset):
         img           = tv.transforms.Resize((640,480))(img)
         img           = img/255
      
-        return img,yolo_midpoint,our_midpoint,joints,carts
+        return img.to(self.device),yolo_midpoint.to(self.device),our_midpoint.to(self.device),joints.to(self.device),carts.to(self.device)
