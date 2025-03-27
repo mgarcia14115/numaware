@@ -77,8 +77,8 @@ class UAFSTrainer:
                 loss.backward()
 
                 self.optimizer.step()
-                y_true.extend(targets.detach())
-                y_pred.extend(predictions.detach())
+                y_true.extend(targets.detach().cpu())
+                y_pred.extend(predictions.detach().cpu())
 
                 
                 
