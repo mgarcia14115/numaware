@@ -48,10 +48,10 @@ class regression_with_images_midpoints(torch.nn.Module):
             torch.nn.MaxPool2d((2,2), 2, 1),
             torch.nn.ReLU(),
             torch.nn.Conv2d(128, 256, (3,3), 1, 1),
-            torch.nn.MaxPool2d((2,2), 2, 1),
+            # torch.nn.MaxPool2d((2,2), 2, 1),
             torch.nn.ReLU(),
             torch.nn.Conv2d(256, 256, (3,3), 1, 1),
-            torch.nn.MaxPool2d((2,2), 2, 1),
+            # torch.nn.MaxPool2d((2,2), 2, 1),
             torch.nn.ReLU(),
             torch.nn.Conv2d(256, 256, (3,3), 1, 1),
             torch.nn.MaxPool2d((2,2), 2, 1),
@@ -61,7 +61,7 @@ class regression_with_images_midpoints(torch.nn.Module):
 
         self.lin = torch.nn.Sequential(
             torch.nn.Linear(86018, 128),
-            torch.nn.Sigmoid(),
+            torch.nn.LeakyReLU(),
             torch.nn.Linear(128, 3),
         )
 
