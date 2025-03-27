@@ -1,20 +1,8 @@
-from uafscs.configs import defaults as config
-import uafscs.models.baseline           as baseline
-import uafscs.models.experiment1        as experiment1
+from models.ct_models import regression_with_midpoints_pose, regression_with_images_midpoints
+def initialize_model(model_name, dropout) :
+    model = None
 
-
-def initialize_model(model_name,**kwargs):
-	
-	model = None
-
-	if model_name == "baseline":
-		return model
-	elif model_name == "experiment1":
-		model = experiment1.UARnn()
-		
-	else:
-
-		return model
-	
-	return model
-
+    if model_name == "regression_with_midpoints_pose":
+        return regression_with_midpoints_pose()
+    elif model_name == "regression_with_images_midpoints":
+        return regression_with_images_midpoints()

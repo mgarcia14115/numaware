@@ -2,4 +2,6 @@
 *.jpg
 *.png
 
-
+*.csv
+*.json
+*.pyc
