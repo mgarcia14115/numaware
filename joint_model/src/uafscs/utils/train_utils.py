@@ -35,14 +35,6 @@ class UAFSTrainer:
         
         if optimizer.lower() == "adamw":
             self.optimizer   = torch.optim.AdamW(model.parameters(),lr=self.lr)
-<<<<<<< HEAD
-        #Add the rest later        
-        
-        if loss_fn.lower()  == "mse":
-
-            self.loss_fn = torch.nn.MSELoss()
-        
-=======
         elif optimizer.lower() == "adam":
             self.optimizer   = torch.optim.Adam(model.parameters(),lr=self.lr)
         else:
@@ -53,7 +45,6 @@ class UAFSTrainer:
             self.loss_fn = torch.nn.MSELoss()
         if loss_fn.lower()  == "crossentropy":
             self.loss_fn = torch.nn.CrossEntropyLoss()
->>>>>>> main
         
 
 
