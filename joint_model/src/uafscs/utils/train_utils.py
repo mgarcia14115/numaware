@@ -1,11 +1,8 @@
 from tqdm            import tqdm
 from sklearn.metrics import r2_score
 import torch
-<<<<<<< HEAD
-=======
 import utils.metric_utils		as meutils
 from configs import defaults as config
->>>>>>> main
 
 class UAFSTrainer:
 
